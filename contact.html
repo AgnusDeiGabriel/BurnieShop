@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact - BURNIE-SHOP</title>
+    <link rel="shortcut icon" href="./fille.jpeg">
+
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Tailwind config -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#000000',
+            gold: '#d4af37'
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-gray-50 text-gray-900">
+
+<!-- NAVBAR -->
+<nav class="flex justify-between items-center px-8 py-4 bg-white shadow-md sticky top-0 z-50">
+  <h1 class="text-2xl font-bold tracking-wide">BURNIE<span class="text-gold">SHOP</span></h1>
+  <div class="flex gap-8 items-center">
+    <a href="index.html" class="font-semibold hover:text-gold transition">Accueil</a>
+    <a href="gallery.html" class="font-semibold hover:text-gold transition">Galerie</a>
+    <a href="contact.html" class="font-semibold text-gold">Contact</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="bg-gradient-to-r from-black to-gray-800 text-white px-6 md:px-16 py-16 text-center">
+  <h1 class="text-5xl font-bold mb-4">Nous Contacter</h1>
+  <p class="text-xl text-gray-300">Nous sommes disponibles 24/7 pour répondre à vos questions</p>
+</section>
+
+<!-- MAIN CONTACT SECTION -->
+<section class="px-6 md:px-16 py-16">
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-6xl mx-auto">
+    
+    <!-- LEFT SIDE - CONTACT INFO -->
+    <div>
+      <h2 class="text-3xl font-bold mb-8">Nous Joindre</h2>
+      
+      <!-- WhatsApp -->
+      <div class="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition mb-6">
+        <div class="flex items-center mb-4">
+          <div class="text-4xl mr-4">💬</div>
+          <div>
+            <h3 class="text-2xl font-bold">WhatsApp</h3>
+            <p class="text-gray-600">Chat instantané</p>
+          </div>
+        </div>
+        <p class="text-gray-700 mb-4">Contactez-nous directement sur WhatsApp pour une réponse rapide et personnalisée.</p>
+        <a href="https://wa.me/50932242766" target="_blank" class="inline-block bg-green-500 text-white px-6 py-3 rounded-lg font-bold hover:bg-green-600 transition">
+          📱 Ouvrir WhatsApp
+        </a>
+      </div>
+
+      <!-- Phone -->
+      <div class="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition mb-6">
+        <div class="flex items-center mb-4">
+          <div class="text-4xl mr-4">☎️</div>
+          <div>
+            <h3 class="text-2xl font-bold">Téléphone</h3>
+            <p class="text-gray-600">Appelez-nous</p>
+          </div>
+        </div>
+        <p class="text-gray-700 mb-4">Appelez-nous directement pour discuter de vos besoins en cheveux.</p>
+        <a href="tel:+50932242766" class="inline-block bg-blue-500 text-white px-6 py-3 rounded-lg font-bold hover:bg-blue-600 transition">
+          📞 +50932242766
+        </a>
+      </div>
+
+      <!-- Email -->
+      <div class="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition mb-6">
+        <div class="flex items-center mb-4">
+          <div class="text-4xl mr-4">✉️</div>
+          <div>
+            <h3 class="text-2xl font-bold">Email</h3>
+            <p class="text-gray-600">Envoyez-nous un message</p>
+          </div>
+        </div>
+        <p class="text-gray-700 mb-4">Nous répondrons à votre email dans les 24 heures.</p>
+        <a href="mailto:burnieshop@outlook.com" class="inline-block bg-purple-500 text-white px-6 py-3 rounded-lg font-bold hover:bg-purple-600 transition">
+          📧 Envoyer un Email
+        </a>
+      </div>
+
+    </div>
+
+    <!-- RIGHT SIDE - CONTACT FORM -->
+    <div>
+      <h2 class="text-3xl font-bold mb-8">Formulaire de Contact</h2>
+      <form id="contactForm" class="bg-white p-8 rounded-xl shadow-lg">
+        
+        <div class="mb-6">
+          <label class="block text-sm font-bold mb-2">Votre Nom</label>
+          <input type="text" required placeholder="Ex: Marie Dupont" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-gold">
+        </div>
+
+        <div class="mb-6">
+          <label class="block text-sm font-bold mb-2">Email</label>
+          <input type="email" required placeholder="votre@email.com" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-gold">
+        </div>
+
+        <div class="mb-6">
+          <label class="block text-sm font-bold mb-2">Téléphone (WhatsApp)</label>
+          <input type="tel" required placeholder="+509xxxxxxx" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-gold">
+        </div>
+
+        <div class="mb-6">
+          <label class="block text-sm font-bold mb-2">Sujet</label>
+          <select required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-gold">
+            <option value="">Sélectionnez un sujet</option>
+            <option value="question">Question sur les produits</option>
+            <option value="commande">Passer une commande</option>
+            <option value="autre">Autre</option>
+          </select>
+        </div>
+
+        <div class="mb-6">
+          <label class="block text-sm font-bold mb-2">Message</label>
+          <textarea required placeholder="Décrivez votre message ici..." rows="5" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-gold"></textarea>
+        </div>
+
+        <button type="submit" class="w-full bg-black text-white py-3 rounded-lg font-bold hover:bg-gold hover:text-black transition">
+          Envoyer le Message
+        </button>
+      </form>
+    </div>
+
+  </div>
+</section>
+
+<!-- QUICK CONTACT SECTION -->
+<section class="bg-gold text-black px-6 md:px-16 py-16">
+  <h2 class="text-3xl font-bold text-center mb-12">Moyens de Contact Rapides</h2>
+  <div class="grid grid-cols-1 sm:grid-cols-3 gap-8 max-w-4xl mx-auto">
+    
+    <a href="https://wa.me/50932242766" target="_blank" class="bg-white p-8 rounded-lg text-center shadow-lg hover:shadow-xl hover:scale-105 transition">
+      <div class="text-5xl mb-4">💬</div>
+      <h3 class="text-xl font-bold mb-2">WhatsApp</h3>
+      <p class="text-sm">Réponse en quelques minutes</p>
+    </a>
+
+    <a href="tel:+50932242766" class="bg-white p-8 rounded-lg text-center shadow-lg hover:shadow-xl hover:scale-105 transition">
+      <div class="text-5xl mb-4">☎️</div>
+      <h3 class="text-xl font-bold mb-2">Appel Direct</h3>
+      <p class="text-sm">Parlez à un expert</p>
+    </a>
+
+    <a href="mailto:burnieshop@outlook.com" class="bg-white p-8 rounded-lg text-center shadow-lg hover:shadow-xl hover:scale-105 transition">
+      <div class="text-5xl mb-4">✉️</div>
+      <h3 class="text-xl font-bold mb-2">Email</h3>
+      <p class="text-sm">Réponse sous 24h</p>
+    </a>
+
+  </div>
+</section>
+
+<!-- HOURS & INFO -->
+<section class="px-6 md:px-16 py-16 bg-white">
+  <div class="max-w-4xl mx-auto">
+    <h2 class="text-3xl font-bold text-center mb-12">Informations Supplémentaires</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+      
+      <div>
+        <h3 class="text-2xl font-bold mb-4">Horaires de Service</h3>
+        <ul class="space-y-3 text-gray-700">
+          <li><strong>WhatsApp:</strong> 24h/24, 7j/7</li>
+          <li><strong>Téléphone:</strong> 09:00 - 22:00 (Lun-Dim)</li>
+          <li><strong>Email:</strong> 24h/24, réponse en 24h</li>
+          <li><strong>Urgent:</strong> Utilisez WhatsApp</li>
+        </ul>
+      </div>
+
+      <div>
+        <h3 class="text-2xl font-bold mb-4">Ce Que Nous Offrons</h3>
+        <ul class="space-y-3 text-gray-700">
+          <li>✓ Conseils personnalisés sur les cheveux</li>
+          <li>✓ Assistance pour choisir le style</li>
+          <li>✓ Support pour les commandes</li>
+          <li>✓ Suivi de livraison en temps réel</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="px-6 md:px-16 py-16 bg-gray-100">
+  <h2 class="text-3xl font-bold text-center mb-12">Questions Fréquentes</h2>
+  <div class="max-w-2xl mx-auto space-y-4">
+    
+    <div class="bg-white p-6 rounded-lg shadow">
+      <h3 class="text-xl font-bold mb-2">Comment puis-je passer une commande?</h3>
+      <p class="text-gray-700">Vous pouvez explorer notre galerie, puis nous contacter via WhatsApp, téléphone ou email pour passer votre commande. Nous vous aiderons à choisir le style parfait!</p>
+    </div>
+
+    <div class="bg-white p-6 rounded-lg shadow">
+      <h3 class="text-xl font-bold mb-2">Quel est le délai de livraison?</h3>
+      <p class="text-gray-700">La livraison standard prend 7-10 jours ouvrables. Une livraison express (3-5 jours) est également disponible. Le délai exact sera confirmé lors de votre commande.</p>
+    </div>
+
+    <div class="bg-white p-6 rounded-lg shadow">
+      <h3 class="text-xl font-bold mb-2">Les cheveux peuvent-ils être teints ou coiffés?</h3>
+      <p class="text-gray-700">Oui! Nos cheveux 100% vierges peuvent être teints, coiffés, décolorés et styleisés comme vos cheveux naturels. Cependant, nous recommandons de consulter un professionnel.</p>
+    </div>
+
+    <div class="bg-white p-6 rounded-lg shadow">
+      <h3 class="text-xl font-bold mb-2">Où puis-je trouver les produits?</h3>
+      <p class="text-gray-700">Adress: #4,Morne Calvaire Petion-ville Port-au-Prince Haiti</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="bg-gray-900 text-white text-center py-8">
+  <p class="mb-4">&copy; 2026 BURNIE-SHOP — Tous droits réservés</p>
+  <div class="flex justify-center gap-6 mb-4">
+    <a href="index.html" class="hover:text-gold transition">Accueil</a>
+    <a href="gallery.html" class="hover:text-gold transition">Galerie</a>
+    <a href="contact.html" class="hover:text-gold transition">Contact</a>
+  </div>
+  <div class="flex justify-center gap-6">
+    <a href="https://wa.me/5733344422" target="_blank" class="hover:text-gold transition">WhatsApp</a>
+    <a href="tel:+5733344422" class="hover:text-gold transition">Téléphone</a>
+    <a href="mailto:burnieshop@outlook.com" class="hover:text-gold transition">Email</a>
+  </div>
+</footer>
+
+<!-- JAVASCRIPT -->
+<script>
+  // Contact Form Handler
+  document.getElementById('contactForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    // Get form values
+    const form = this;
+    const nom = form.querySelector('input[placeholder*="Marie"]').value;
+    const email = form.querySelector('input[type="email"]').value;
+    const telephone = form.querySelector('input[type="tel"]').value;
+    const sujet = form.querySelector('select').value;
+    const message = form.querySelector('textarea').value;
+
+    // Create WhatsApp message
+    const whatsappMessage = `Burnie Shop %0A%0ANom: ${nom}%0AEmail: ${email}%0ATéléphone: ${telephone}%0ASujet: ${sujet}%0A%0AMessage: ${message}`;
+    
+    // Open WhatsApp
+    window.open(`https://wa.me/50932242766?text=${whatsappMessage}`, '_blank');
+    
+    // Reset form
+    form.reset();
+    alert("Redirection vers WhatsApp... ✅");
+  });
+</script>
+
+</body>
+</html>
