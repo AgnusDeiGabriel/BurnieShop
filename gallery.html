@@ -27,29 +27,65 @@
 
 <!-- NAVBAR -->
 <nav class="flex justify-between items-center px-8 py-4 bg-white shadow-md sticky top-0 z-50">
-  <h1 class="text-2xl font-bold tracking-wide">BURNIE<span class="text-gold">SHOP</span></h1>
-  <div class="flex gap-8 items-center">
+  <div class="flex items-center gap-4">
+    <!-- MOBILE MENU BUTTON -->
+    <button onclick="toggleSidebar()" class="md:hidden px-4 py-2 rounded-full font-semibold transition border-2 border-gold text-gold hover:bg-gold hover:text-black">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+    </button>
+    <h1 class="text-2xl font-bold tracking-wide">BURNIE<span class="text-gold">SHOP</span></h1>
+  </div>
+  <div class="hidden md:flex gap-8 items-center">
+    <div class="relative">
+      <input type="text" id="searchInput" data-lang="search-placeholder" placeholder="Rechercher..." class="px-4 py-2 pl-10 border border-gray-300 rounded-lg focus:outline-none focus:border-gold" onkeyup="searchGallery()">
+      <svg class="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+    </div>
     <a href="index.html" class="font-semibold hover:text-gold transition">Accueil</a>
     <a href="gallery.html" class="font-semibold text-gold">Galerie</a>
     <a href="contact.html" class="font-semibold hover:text-gold transition">Contact</a>
+    <div class="flex gap-2 ml-4">
+      <button onclick="switchLanguage('fr')" class="px-3 py-1 text-sm font-semibold border-2 border-gold text-gold hover:bg-gold hover:text-black transition" id="lang-fr">FR</button>
+      <button onclick="switchLanguage('en')" class="px-3 py-1 text-sm font-semibold border-2 border-gray-300 text-gray-600 hover:bg-gray-300 hover:text-black transition" id="lang-en">EN</button>
+    </div>
   </div>
 </nav>
+
+<!-- MOBILE SIDEBAR -->
+<div id="sidebarOverlay" class="fixed inset-0 bg-black/50 z-40 hidden md:hidden" onclick="closeSidebar()"></div>
+<div id="sidebar" class="fixed left-0 top-0 h-full w-80 bg-white shadow-lg z-50 transform -translate-x-full transition-transform duration-300 md:hidden">
+  <div class="p-6">
+    <button onclick="closeSidebar()" class="absolute top-4 right-4 text-2xl font-bold">×</button>
+    <h2 class="text-xl font-bold mb-6 text-center">Menu</h2>
+    <div class="mt-6">
+      <div class="relative">
+        <input type="text" id="searchInputMobile" data-lang="search-placeholder-mobile" placeholder="Rechercher par type ou titre..." class="w-full px-4 py-2 pl-10 border border-gray-300 rounded-lg focus:outline-none focus:border-gold" onkeyup="searchGallery()">
+        <svg class="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+      </div>
+    </div>
+    <div class="space-y-4">
+      <a href="index.html" class="block py-2 px-4 rounded hover:bg-gray-100 transition" onclick="closeSidebar()">Accueil</a>
+      <a href="gallery.html" class="block py-2 px-4 rounded bg-gold text-black" onclick="closeSidebar()">Galerie</a>
+      <a href="contact.html" class="block py-2 px-4 rounded hover:bg-gray-100 transition" onclick="closeSidebar()">Contact</a>
+    </div>
+    <div class="mt-8 pt-6 border-t border-gray-200">
+      <h3 class="text-lg font-semibold mb-4 text-center">Langue</h3>
+      <div class="flex justify-center gap-2 mb-6">
+        <button onclick="switchLanguage('fr'); closeSidebar()" class="px-4 py-2 text-sm font-semibold border-2 border-gold text-gold hover:bg-gold hover:text-black transition" id="lang-fr-mobile">FR</button>
+        <button onclick="switchLanguage('en'); closeSidebar()" class="px-4 py-2 text-sm font-semibold border-2 border-gray-300 text-gray-600 hover:bg-gray-300 hover:text-black transition" id="lang-en-mobile">EN</button>
+      </div>
+      <h3 class="text-lg font-semibold mb-4 text-center">Suivez-nous</h3>
+      <div class="flex justify-center gap-4">
+        <a href="https://www.facebook.com/share/1AkCdm1ixj/" target="_blank" class="text-gray-600 hover:text-gold transition">Facebook</a>
+        <a href="https://www.instagram.com/burnie_shop?igsh=bDZzcTkwaGMwZndi" target="_blank" class="text-gray-600 hover:text-gold transition">Instagram</a>
+        <a href="https://www.tiktok.com/@burnie_shop?_r=1&_t=ZM-931avdVUjSl" target="_blank" class="text-gray-600 hover:text-gold transition">TikTok</a>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- HERO -->
 <section class="bg-gradient-to-r from-black to-gray-800 text-white px-6 md:px-16 py-16 text-center">
   <h1 class="text-5xl font-bold mb-4">Galerie de Cheveux Premium</h1>
   <p class="text-xl text-gray-300">Explorez notre collection complète de cheveux 100% vierges</p>
-</section>
-
-<!-- FILTER BUTTONS -->
-<section class="px-6 md:px-16 py-12 bg-white">
-  <div class="flex justify-center gap-3 flex-wrap mb-8">
-    <button onclick="filterGallery('all')" class="filter-btn active px-6 py-2 rounded-full font-semibold transition bg-black text-white hover:bg-gold hover:text-black" data-filter="all">Tous</button>
-    <button onclick="filterGallery('straight')" class="filter-btn px-6 py-2 rounded-full font-semibold transition border-2 border-black hover:bg-black hover:text-white" data-filter="straight">Raides</button>
-    <button onclick="filterGallery('curly')" class="filter-btn px-6 py-2 rounded-full font-semibold transition border-2 border-black hover:bg-black hover:text-white" data-filter="curly">Boucles</button>
-    <button onclick="filterGallery('wavy')" class="filter-btn px-6 py-2 rounded-full font-semibold transition border-2 border-black hover:bg-black hover:text-white" data-filter="wavy">Ondulés</button>
-    <button onclick="filterGallery('wig')" class="filter-btn px-6 py-2 rounded-full font-semibold transition border-2 border-black hover:bg-black hover:text-white" data-filter="wig">Perruques</button>
-  </div>
 </section>
 
 <!-- GALLERY GRID -->
@@ -58,112 +94,112 @@
     
     <!-- ITEM 1 -->
     <div class="gallery-item group overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition" data-category="straight">
-      <div class="relative overflow-hidden h-96 cursor-pointer" onclick="openModal('https://images.unsplash.com/photo-1580618672591-eb180b1a973f', 'Cheveux Raides Luxe')">
+      <div class="relative overflow-hidden h-20 cursor-pointer" onclick="openModal('https://images.unsplash.com/photo-1580618672591-eb180b1a973f', 'Cheveux Raides Luxe')">
         <img src="https://images.unsplash.com/photo-1580618672591-eb180b1a973f" class="w-full h-full object-cover group-hover:scale-110 transition duration-300">
         <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
           <p class="text-white font-bold text-lg">Voir Plus</p>
         </div>
       </div>
       <div class="bg-white p-4">
-        <h4 class="font-bold text-lg">Cheveux Raides Luxe</h4>
+        <h4 class="font-bold text-lg text-sm">Cheveux Raides Luxe</h4>
         
       </div>
     </div>
 
     <!-- ITEM 2 -->
     <div class="gallery-item group overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition" data-category="curly">
-      <div class="relative overflow-hidden h-96 cursor-pointer" onclick="openModal('https://images.unsplash.com/photo-1544717305-2782549b5136', 'Boucles Parfaites')">
+      <div class="relative overflow-hidden h-20 cursor-pointer" onclick="openModal('https://images.unsplash.com/photo-1544717305-2782549b5136', 'Boucles Parfaites')">
         <img src="https://images.unsplash.com/photo-1544717305-2782549b5136" class="w-full h-full object-cover group-hover:scale-110 transition duration-300">
         <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
           <p class="text-white font-bold text-lg">Voir Plus</p>
         </div>
       </div>
       <div class="bg-white p-4">
-        <h4 class="font-bold text-lg">Boucles Parfaites</h4>
+        <h4 class="font-bold text-lg text-sm">Boucles Parfaites</h4>
         
       </div>
     </div>
 
     <!-- ITEM 3 -->
     <div class="gallery-item group overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition" data-category="wavy">
-      <div class="relative overflow-hidden h-96 cursor-pointer" onclick="openModal('https://images.unsplash.com/photo-1600185365926-3a2ce3cdb9eb', 'Ondes Corporelles')">
+      <div class="relative overflow-hidden h-20 cursor-pointer" onclick="openModal('https://images.unsplash.com/photo-1600185365926-3a2ce3cdb9eb', 'Ondes Corporelles')">
         <img src="https://images.unsplash.com/photo-1600185365926-3a2ce3cdb9eb" class="w-full h-full object-cover group-hover:scale-110 transition duration-300">
         <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
           <p class="text-white font-bold text-lg">Voir Plus</p>
         </div>
       </div>
       <div class="bg-white p-4">
-        <h4 class="font-bold text-lg">Ondes Corporelles</h4>
+        <h4 class="font-bold text-lg text-sm">Ondes Corporelles</h4>
         
       </div>
     </div>
 
     <!-- ITEM 4 -->
     <div class="gallery-item group overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition" data-category="wig">
-      <div class="relative overflow-hidden h-96 cursor-pointer" onclick="openModal('https://images.unsplash.com/photo-1522336572468-97b06e8ef143', 'Perruque Classique')">
+      <div class="relative overflow-hidden h-20 cursor-pointer" onclick="openModal('https://images.unsplash.com/photo-1522336572468-97b06e8ef143', 'Perruque Classique')">
         <img src="https://images.unsplash.com/photo-1522336572468-97b06e8ef143" class="w-full h-full object-cover group-hover:scale-110 transition duration-300">
         <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
           <p class="text-white font-bold text-lg">Voir Plus</p>
         </div>
       </div>
       <div class="bg-white p-4">
-        <h4 class="font-bold text-lg">Perruque Classique</h4>
+        <h4 class="font-bold text-lg text-sm">Perruque Classique</h4>
         
       </div>
     </div>
 
     <!-- ITEM 5 -->
     <div class="gallery-item group overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition" data-category="straight">
-      <div class="relative overflow-hidden h-96 cursor-pointer" onclick="openModal('https://images.unsplash.com/photo-1570172619644-dfd03cb5f713', 'Cheveux Raides Soyeux')">
+      <div class="relative overflow-hidden h-20 cursor-pointer" onclick="openModal('https://images.unsplash.com/photo-1570172619644-dfd03cb5f713', 'Cheveux Raides Soyeux')">
         <img src="https://images.unsplash.com/photo-1570172619644-dfd03cb5f713" class="w-full h-full object-cover group-hover:scale-110 transition duration-300">
         <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
           <p class="text-white font-bold text-lg">Voir Plus</p>
         </div>
       </div>
       <div class="bg-white p-4">
-        <h4 class="font-bold text-lg">Cheveux Raides Soyeux</h4>
+        <h4 class="font-bold text-lg text-sm">Cheveux Raides Soyeux</h4>
         
       </div>
     </div>
 
     <!-- ITEM 6 -->
     <div class="gallery-item group overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition" data-category="curly">
-      <div class="relative overflow-hidden h-96 cursor-pointer" onclick="openModal('https://images.unsplash.com/photo-1599705814174-2c1e7b3cb3b5', 'Boucles Voluptueuses')">
+      <div class="relative overflow-hidden h-20 cursor-pointer" onclick="openModal('https://images.unsplash.com/photo-1599705814174-2c1e7b3cb3b5', 'Boucles Voluptueuses')">
         <img src="https://images.unsplash.com/photo-1599705814174-2c1e7b3cb3b5" class="w-full h-full object-cover group-hover:scale-110 transition duration-300">
         <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
           <p class="text-white font-bold text-lg">Voir Plus</p>
         </div>
       </div>
       <div class="bg-white p-4">
-        <h4 class="font-bold text-lg">Boucles Voluptueuses</h4>
+        <h4 class="font-bold text-lg text-sm">Boucles Voluptueuses</h4>
         
       </div>
     </div>
 
     <!-- ITEM 7 -->
     <div class="gallery-item group overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition" data-category="wavy">
-      <div class="relative overflow-hidden h-96 cursor-pointer" onclick="openModal('https://images.unsplash.com/photo-1529148482759-b8f6f7e8d0b7', 'Ondes Légères')">
+      <div class="relative overflow-hidden h-20 cursor-pointer" onclick="openModal('https://images.unsplash.com/photo-1529148482759-b8f6f7e8d0b7', 'Ondes Légères')">
         <img src="https://images.unsplash.com/photo-1529148482759-b8f6f7e8d0b7" class="w-full h-full object-cover group-hover:scale-110 transition duration-300">
         <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
           <p class="text-white font-bold text-lg">Voir Plus</p>
         </div>
       </div>
       <div class="bg-white p-4">
-        <h4 class="font-bold text-lg">Ondes Légères</h4>
+        <h4 class="font-bold text-lg text-sm">Ondes Légères</h4>
         
       </div>
     </div>
 
     <!-- ITEM 8 -->
     <div class="gallery-item group overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition" data-category="wig">
-      <div class="relative overflow-hidden h-96 cursor-pointer" onclick="openModal('https://images.unsplash.com/photo-1509631179647-0177331693ae', 'Perruque Élégante')">
+      <div class="relative overflow-hidden h-20 cursor-pointer" onclick="openModal('https://images.unsplash.com/photo-1509631179647-0177331693ae', 'Perruque Élégante')">
         <img src="https://images.unsplash.com/photo-1509631179647-0177331693ae" class="w-full h-full object-cover group-hover:scale-110 transition duration-300">
         <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
           <p class="text-white font-bold text-lg">Voir Plus</p>
         </div>
       </div>
       <div class="bg-white p-4">
-        <h4 class="font-bold text-lg">Perruque Élégante</h4>
+        <h4 class="font-bold text-lg text-sm">Perruque Élégante</h4>
         
       </div>
     </div>
@@ -206,6 +242,18 @@
 
 <!-- JAVASCRIPT -->
 <script>
+  // Translations object
+  const translations = {
+    fr: {
+      'search-placeholder': 'Rechercher...',
+      'search-placeholder-mobile': 'Rechercher par type ou titre...'
+    },
+    en: {
+      'search-placeholder': 'Search...',
+      'search-placeholder-mobile': 'Search by type or title...'
+    }
+  };
+
   let cart = 0;
 
   function filterGallery(category) {
@@ -247,6 +295,70 @@
       closeModal();
     }
   });
+
+  function toggleSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebarOverlay');
+    sidebar.classList.toggle('-translate-x-full');
+    overlay.classList.toggle('hidden');
+  }
+
+  function closeSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebarOverlay');
+    sidebar.classList.add('-translate-x-full');
+    overlay.classList.add('hidden');
+  }
+
+  function searchGallery() {
+    const searchInput = document.getElementById('searchInput').value.toLowerCase();
+    const items = document.querySelectorAll('.gallery-item');
+
+    items.forEach(item => {
+      const title = item.querySelector('h4').innerText.toLowerCase();
+      const category = item.dataset.category.toLowerCase();
+      if (title.includes(searchInput) || category.includes(searchInput)) {
+        item.style.display = 'block';
+        setTimeout(() => item.style.opacity = '1', 10);
+      } else {
+        item.style.opacity = '0';
+        setTimeout(() => item.style.display = 'none', 300);
+      }
+    });
+  }
+
+  function switchLanguage(lang) {
+    // Update button states
+    document.getElementById('lang-fr').classList.toggle('border-gold', lang === 'fr');
+    document.getElementById('lang-fr').classList.toggle('text-gold', lang === 'fr');
+    document.getElementById('lang-fr').classList.toggle('border-gray-300', lang !== 'fr');
+    document.getElementById('lang-fr').classList.toggle('text-gray-600', lang !== 'fr');
+
+    document.getElementById('lang-en').classList.toggle('border-gold', lang === 'en');
+    document.getElementById('lang-en').classList.toggle('text-gold', lang === 'en');
+    document.getElementById('lang-en').classList.toggle('border-gray-300', lang !== 'en');
+    document.getElementById('lang-en').classList.toggle('text-gray-600', lang !== 'en');
+
+    // Update mobile buttons
+    document.getElementById('lang-fr-mobile').classList.toggle('border-gold', lang === 'fr');
+    document.getElementById('lang-fr-mobile').classList.toggle('text-gold', lang === 'fr');
+    document.getElementById('lang-fr-mobile').classList.toggle('border-gray-300', lang !== 'fr');
+    document.getElementById('lang-fr-mobile').classList.toggle('text-gray-600', lang !== 'fr');
+
+    document.getElementById('lang-en-mobile').classList.toggle('border-gold', lang === 'en');
+    document.getElementById('lang-en-mobile').classList.toggle('text-gold', lang === 'en');
+    document.getElementById('lang-en-mobile').classList.toggle('border-gray-300', lang !== 'en');
+    document.getElementById('lang-en-mobile').classList.toggle('text-gray-600', lang !== 'en');
+
+    // Update placeholders
+    const elements = document.querySelectorAll('[data-lang]');
+    elements.forEach(element => {
+      const key = element.getAttribute('data-lang');
+      if (translations[lang] && translations[lang][key]) {
+        element.placeholder = translations[lang][key];
+      }
+    });
+  }
 </script>
 
 </body>
