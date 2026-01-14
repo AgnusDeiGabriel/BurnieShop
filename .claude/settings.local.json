@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:shop.mayvenn.com)",
+      "WebSearch",
+      "WebFetch(domain:unsplash.com)",
+      "Bash(python scraper.py:*)",
+      "Bash(pip install:*)",
+      "Bash(python download_images.py:*)",
+      "Bash(dir:*)",
+      "Bash(findstr:*)",
+      "Bash(python generate_gallery.py:*)"
+    ]
+  }
+}
