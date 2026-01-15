@@ -33,7 +33,6 @@ def generate_html(products):
     product_cards = []
     for i, product in enumerate(products, 1):
         title = product['title']
-        price = product['price']
         category = get_category(title)
 
         # Find matching image file
@@ -45,7 +44,7 @@ def generate_html(products):
 
         card = f'''
     <!-- Product {i} -->
-    <div class="product-card group" data-category="{category}" data-title="{title.lower()}" data-price="{price}">
+    <div class="product-card group" data-category="{category}" data-title="{title.lower()}">
       <div class="relative overflow-hidden rounded-t-2xl">
         <img src="{image_path}" alt="{title}" class="w-full h-48 sm:h-56 md:h-64 object-cover group-hover:scale-110 transition-transform duration-500" loading="lazy" onerror="this.src='https://via.placeholder.com/400x400?text=Image+Not+Found'">
         <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
@@ -54,9 +53,6 @@ def generate_html(products):
               Quick View
             </button>
           </div>
-        </div>
-        <div class="absolute top-3 right-3">
-          <span class="bg-gold text-black px-3 py-1 rounded-full text-sm font-bold shadow-lg">{price}</span>
         </div>
       </div>
       <div class="bg-white p-4 rounded-b-2xl">
@@ -73,7 +69,7 @@ def generate_html(products):
     modal_data = []
     for i, product in enumerate(products, 1):
         title = product['title']
-        price = product['price']
+        price = product.get('price', 'N/A')
         category = get_category(title)
 
         image_files = [f for f in os.listdir(IMAGES_FOLDER) if f.startswith(f"{i:04d}_")]
@@ -82,7 +78,7 @@ def generate_html(products):
         else:
             image_path = "https://via.placeholder.com/400x400?text=No+Image"
 
-        modal_data.append(f'{{ id: {i}, title: "{title.replace('"', '\\"')}", price: "{price}", image: "{image_path}", category: "{category}" }}')
+        modal_data.append(f'{{ id: {i}, title: "{title.replace('"', '\\"')}", image: "{image_path}", category: "{category}" }}')
 
     html = f'''<!DOCTYPE html>
 <html lang="en">
@@ -261,8 +257,6 @@ def generate_html(products):
       <div class="flex items-center gap-4">
         <select id="sortSelect" onchange="sortProducts()" class="px-4 py-2 bg-gray-100 rounded-lg border-0 focus:ring-2 focus:ring-gold text-sm">
           <option value="default">Sort by</option>
-          <option value="price-low">Price: Low to High</option>
-          <option value="price-high">Price: High to Low</option>
           <option value="name">Name: A-Z</option>
         </select>
         <span id="productCount" class="text-sm text-gray-500">{len(products)} products</span>
@@ -351,7 +345,6 @@ def generate_html(products):
           <span id="modalCategory" class="text-xs text-gold uppercase tracking-wide font-semibold"></span>
           <h2 id="modalTitle" class="text-xl sm:text-2xl font-bold mt-1"></h2>
         </div>
-        <span id="modalPrice" class="text-2xl font-bold text-gold"></span>
       </div>
       <div class="flex gap-3">
         <a href="contact.html" class="flex-1 bg-black text-white py-3 rounded-xl font-bold text-center hover:bg-gray-800 transition">
@@ -442,11 +435,7 @@ def generate_html(products):
     const cards = Array.from(grid.querySelectorAll('.product-card'));
 
     cards.sort((a, b) => {{
-      if (sortBy === 'price-low') {{
-        return parseFloat(a.dataset.price.replace('$', '')) - parseFloat(b.dataset.price.replace('$', ''));
-      }} else if (sortBy === 'price-high') {{
-        return parseFloat(b.dataset.price.replace('$', '')) - parseFloat(a.dataset.price.replace('$', ''));
-      }} else if (sortBy === 'name') {{
+      if (sortBy === 'name') {{
         return a.dataset.title.localeCompare(b.dataset.title);
       }}
       return 0;
@@ -482,7 +471,6 @@ def generate_html(products):
 
     document.getElementById('modalImage').src = product.image;
     document.getElementById('modalTitle').textContent = product.title;
-    document.getElementById('modalPrice').textContent = product.price;
     document.getElementById('modalCategory').textContent = product.category;
     document.getElementById('modal').classList.remove('hidden');
     document.body.style.overflow = 'hidden';

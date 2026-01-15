@@ -80,19 +80,8 @@ def parse_products(soup):
             seen_titles.add(title)
 
             # Find price - try multiple selectors
-            price = "N/A"
-            price_selectors = [
-                ".price", "[class*='price']", ".money",
-                "[class*='Price']", "span[class*='price']"
-            ]
-            for selector in price_selectors:
-                price_el = container.select_one(selector)
-                if price_el:
-                    price_text = price_el.get_text(strip=True)
-                    if "$" in price_text or price_text.replace(".", "").replace(",", "").isdigit():
-                        price = price_text
-                        break
-
+            
+            
             # Find image URL
             image_url = "N/A"
             img_selectors = [
@@ -119,7 +108,7 @@ def parse_products(soup):
                         image_url = img_src
                         break
 
-            products.append({"title": title, "price": price, "image": image_url})
+            products.append({"title": title, "image": image_url})
 
     # Fallback: find products by links if no containers found
     if not products:
@@ -175,9 +164,10 @@ def save_to_csv(products, filename):
         return
 
     with open(filename, "w", newline="", encoding="utf-8") as f:
-        writer = csv.DictWriter(f, fieldnames=["title", "price", "image"])
+        writer = csv.DictWriter(f, fieldnames=["title", "image"])
         writer.writeheader()
-        writer.writerows(products)
+        for product in products:
+            writer.writerow({"title": product["title"], "image": product["image"]})
 
     print(f"Saved {len(products)} products to {filename}")
 
