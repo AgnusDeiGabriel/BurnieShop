@@ -37864,17 +37864,20 @@
         modal.dataset.product = productName;
         modal.dataset.image = imageUrl;
         document.getElementById('waPromptProduct').textContent = productName;
+        document.getElementById('waPromptFullName').value = '';
         document.getElementById('waPromptMessage').value = '';
         document.getElementById('waPromptLocation').value = '';
         modal.classList.remove('hidden');
         modal.classList.add('flex');
       }
 
-      function sendProductToWhatsAppFinal(productName, imageUrl, userMsg, userLoc) {
+      function sendProductToWhatsAppFinal(productName, imageUrl, userFullName, userMsg, userLoc) {
         const origin = window.location.origin || 'http://127.0.0.1:5500';
         const fullImageUrl = `${origin}/${imageUrl}`;
         const imageLink = `${origin}/view_image.html?src=${encodeURIComponent(fullImageUrl)}`;
-        let whatsappText = `*BURNIE SHOP - Demande de Produit*\n\n*Produit:* ${productName}\n\n`;
+        let whatsappText = `*BURNIE SHOP - Demande de Produit*\n\n`;
+        if (userFullName) whatsappText += `*Nom complet / Full name:* ${userFullName}\n\n`;
+        whatsappText += `*Produit:* ${productName}\n\n`;
         if (userMsg) whatsappText += `*Message:*\n${userMsg}\n\n`;
 
         // Convert location to a Google Maps URL if provided
@@ -37953,30 +37956,31 @@
           document.getElementById('waDetectLocation')?.addEventListener('click', function() {
             const btn = this;
             btn.disabled = true;
-            btn.textContent = 'Detecting...';
+            btn.textContent = translations[document.documentElement.lang]?.['wa-detecting'] || 'Detecting...';
             if (!navigator.geolocation) {
               alert('Geolocation not supported by your browser');
-              btn.disabled = false; btn.textContent = 'Detecter localisation';
+              btn.disabled = false; btn.textContent = translations[document.documentElement.lang]?.['wa-detect'] || 'Detect location';
               return;
             }
             navigator.geolocation.getCurrentPosition(function(pos) {
               const lat = pos.coords.latitude.toFixed(5);
               const lon = pos.coords.longitude.toFixed(5);
               document.getElementById('waPromptLocation').value = `${lat}, ${lon}`;
-              btn.disabled = false; btn.textContent = 'Detecter localisation';
+              btn.disabled = false; btn.textContent = translations[document.documentElement.lang]?.['wa-detect'] || 'Detect location';
             }, function(err) {
               alert('Erreur detection: ' + err.message);
-              btn.disabled = false; btn.textContent = 'Detecter localisation';
+              btn.disabled = false; btn.textContent = translations[document.documentElement.lang]?.['wa-detect'] || 'Detect location';
             }, {timeout:10000});
           });
 
           document.getElementById('waSend')?.addEventListener('click', function() {
             const product = waModal.dataset.product || '';
             const image = waModal.dataset.image || '';
+            const fullName = document.getElementById('waPromptFullName').value || '';
             const msg = document.getElementById('waPromptMessage').value || '';
             const loc = document.getElementById('waPromptLocation').value || '';
             waModal.classList.add('hidden'); waModal.classList.remove('flex');
-            sendProductToWhatsAppFinal(product, image, msg, loc);
+            sendProductToWhatsAppFinal(product, image, fullName, msg, loc);
           });
         }
       });
@@ -38020,6 +38024,18 @@
           "nav-contact": "Contact",
           "sidebar-lang": "Langue",
           "sidebar-follow": "Suivez-nous",
+          "wa-modal-title": "Demande — WhatsApp",
+          "wa-product-label": "Produit :",
+          "wa-fullname-label": "Nom complet",
+          "wa-fullname-placeholder": "(optionnel)",
+          "wa-message-label": "Message",
+          "wa-message-placeholder": "(optionnel)",
+          "wa-location-label": "Localisation",
+          "wa-location-placeholder": "(optionnel)",
+          "wa-detect": "Détecter localisation",
+          "wa-detecting": "Détection...",
+          "wa-cancel": "Annuler",
+          "wa-send": "Envoyer sur WhatsApp",
         },
         en: {
           "nav-home": "Home",
@@ -38028,6 +38044,18 @@
           "nav-contact": "Contact",
           "sidebar-lang": "Language",
           "sidebar-follow": "Follow Us",
+          "wa-modal-title": "Request — WhatsApp",
+          "wa-product-label": "Product:",
+          "wa-fullname-label": "Full name",
+          "wa-fullname-placeholder": "(optional)",
+          "wa-message-label": "Message",
+          "wa-message-placeholder": "(optional)",
+          "wa-location-label": "Location",
+          "wa-location-placeholder": "(optional)",
+          "wa-detect": "Detect location",
+          "wa-detecting": "Detecting...",
+          "wa-cancel": "Cancel",
+          "wa-send": "Send on WhatsApp",
         },
       };
 
@@ -38070,8 +38098,14 @@
         const elements = document.querySelectorAll("[data-lang]");
         elements.forEach((element) => {
           const key = element.getAttribute("data-lang");
-          if (translations[lang][key]) {
-            element.textContent = translations[lang][key];
+          const text = translations[lang][key];
+          if (text) {
+            const tag = (element.tagName || '').toUpperCase();
+            if (tag === 'INPUT' || tag === 'TEXTAREA') {
+              element.placeholder = text;
+            } else {
+              element.textContent = text;
+            }
           }
         });
 
@@ -38094,18 +38128,20 @@
 <!-- WhatsApp prompt modal -->
 <div id="waPromptModal" class="hidden fixed inset-0 z-50 items-center justify-center bg-black/60">
   <div class="bg-white rounded p-4 max-w-md w-full mx-4">
-    <h3 class="font-bold text-lg mb-2">Demande - Envoyer sur WhatsApp / Request - Send via WhatsApp</h3>
-    <p class="text-sm text-gray-600 mb-2">Produit / Product: <span id="waPromptProduct" class="font-semibold"></span></p>
-    <label class="block text-sm font-medium">Message (optionnel) / Message (optional)</label>
-    <textarea id="waPromptMessage" rows="3" class="w-full p-2 border rounded mb-2"></textarea>
-    <label class="block text-sm font-medium">Localisation (optionnel) / Location (optional)</label>
+    <h3 class="font-bold text-lg mb-2" data-lang="wa-modal-title">Demande — WhatsApp</h3>
+    <p class="text-sm text-gray-600 mb-2"><span data-lang="wa-product-label">Produit :</span> <span id="waPromptProduct" class="font-semibold"></span></p>
+    <label class="block text-sm font-medium" data-lang="wa-fullname-label">Nom complet</label>
+    <input id="waPromptFullName" data-lang="wa-fullname-placeholder" class="w-full p-2 border rounded mb-2" placeholder="(optionnel)" />
+    <label class="block text-sm font-medium" data-lang="wa-message-label">Message</label>
+    <textarea id="waPromptMessage" data-lang="wa-message-placeholder" rows="3" class="w-full p-2 border rounded mb-2" placeholder="(optionnel)"></textarea>
+    <label class="block text-sm font-medium" data-lang="wa-location-label">Localisation</label>
     <div class="flex gap-2 mb-4">
-      <input id="waPromptLocation" class="flex-1 p-2 border rounded" />
-      <button id="waDetectLocation" class="px-3 py-2 rounded bg-gray-200 text-sm">Détecter localisation / Detect location</button>
+      <input id="waPromptLocation" data-lang="wa-location-placeholder" class="flex-1 p-2 border rounded" placeholder="(optionnel)" />
+      <button id="waDetectLocation" class="px-3 py-2 rounded bg-gray-200 text-sm" data-lang="wa-detect">Détecter localisation</button>
     </div>
     <div class="flex justify-end gap-2">
-      <button id="waCancel" class="px-4 py-2 rounded bg-gray-200">Annuler / Cancel</button>
-      <button id="waSend" class="px-4 py-2 rounded bg-green-600 text-white">Envoyer sur WhatsApp / Send via WhatsApp</button>
+      <button id="waCancel" class="px-4 py-2 rounded bg-gray-200" data-lang="wa-cancel">Annuler</button>
+      <button id="waSend" class="px-4 py-2 rounded bg-green-600 text-white" data-lang="wa-send">Envoyer sur WhatsApp</button>
     </div>
   </div>
 </div>

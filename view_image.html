@@ -43,6 +43,38 @@
     return params.get(name) || '';
   }
 
+  // Local translations for modal on this page
+  const viewTranslations = {
+    fr: {
+      'wa-modal-title': 'Demande — WhatsApp',
+      'wa-product-label': 'Produit :',
+      'wa-fullname-label': 'Nom complet',
+      'wa-fullname-placeholder': '(optionnel)',
+      'wa-message-label': 'Message',
+      'wa-message-placeholder': '(optionnel)',
+      'wa-location-label': 'Localisation',
+      'wa-location-placeholder': '(optionnel)',
+      'wa-detect': 'Détecter localisation',
+      'wa-detecting': 'Détection...',
+      'wa-cancel': 'Annuler',
+      'wa-send': 'Envoyer sur WhatsApp',
+    },
+    en: {
+      'wa-modal-title': 'Request — WhatsApp',
+      'wa-product-label': 'Product:',
+      'wa-fullname-label': 'Full name',
+      'wa-fullname-placeholder': '(optional)',
+      'wa-message-label': 'Message',
+      'wa-message-placeholder': '(optional)',
+      'wa-location-label': 'Location',
+      'wa-location-placeholder': '(optional)',
+      'wa-detect': 'Detect location',
+      'wa-detecting': 'Detecting...',
+      'wa-cancel': 'Cancel',
+      'wa-send': 'Send on WhatsApp',
+    }
+  };
+
   const src = getParam('src');
   const img = document.getElementById('previewImage');
   const openOriginal = document.getElementById('openOriginal');
@@ -69,91 +101,102 @@
         setTimeout(()=>copyBtn.textContent='Copier le lien',1500);
       } catch (e) {
         copyBtn.textContent = 'Erreur';
-      }
-    });
+        <div id="waPromptModal" class="hidden fixed inset-0 z-50 items-center justify-center bg-black/60">
+          <div class="bg-white rounded p-4 max-w-md w-full mx-4 text-black">
+            <h3 class="font-bold text-lg mb-2" data-lang="wa-modal-title">Demande — WhatsApp</h3>
+            <p class="text-sm text-gray-600 mb-2"><span data-lang="wa-product-label">Produit :</span> <span id="waPromptProduct" class="font-semibold"></span></p>
+            <label class="block text-sm font-medium" data-lang="wa-fullname-label">Nom complet</label>
+            <input id="waPromptFullName" class="w-full p-2 border rounded mb-2" data-lang="wa-fullname-placeholder" placeholder="(optionnel)" />
+            <label class="block text-sm font-medium" data-lang="wa-message-label">Message</label>
+            <textarea id="waPromptMessage" rows="3" class="w-full p-2 border rounded mb-2" data-lang="wa-message-placeholder" placeholder="(optionnel)"></textarea>
+            <label class="block text-sm font-medium" data-lang="wa-location-label">Localisation</label>
+            <div class="flex gap-2 mb-4">
+              <input id="waPromptLocation" class="flex-1 p-2 border rounded" data-lang="wa-location-placeholder" placeholder="(optionnel)" />
+              <button id="waDetectLocation" class="px-3 py-2 rounded bg-gray-200 text-sm" data-lang="wa-detect">Détecter localisation</button>
+            </div>
+            <div class="flex justify-end gap-2">
+              <button id="waCancel" class="px-4 py-2 rounded bg-gray-200" data-lang="wa-cancel">Annuler</button>
+              <button id="waSend" class="px-4 py-2 rounded bg-green-600 text-white" data-lang="wa-send">Envoyer sur WhatsApp</button>
+            </div>
+          </div>
+        </div>
 
-    document.getElementById('openPreview').addEventListener('click', () => {
-      window.open(decoded, '_blank');
-    });
+        <script>
+          // Modal handlers for view_image page (with geolocation detect)
+          document.addEventListener('DOMContentLoaded', function() {
+            const lang = localStorage.getItem('preferredLanguage') || document.documentElement.lang || 'en';
+            document.querySelectorAll('[data-lang]').forEach((el) => {
+              const key = el.getAttribute('data-lang');
+              const text = (viewTranslations[lang] && viewTranslations[lang][key]);
+              if (text) {
+                const tag = (el.tagName || '').toUpperCase();
+                if (tag === 'INPUT' || tag === 'TEXTAREA') el.placeholder = text; else el.textContent = text;
+              }
+            });
+            const waModal = document.getElementById('waPromptModal');
+            if (!waModal) return;
+            document.getElementById('waCancel')?.addEventListener('click', function() {
+              waModal.classList.add('hidden'); waModal.classList.remove('flex');
+            });
 
-    document.getElementById('sendWhatsApp').addEventListener('click', () => {
-      // Open small prompt modal to collect message and location before sending
-      const waModal = document.getElementById('waPromptModal');
-      if (!waModal) return alert('Modal not found');
-      waModal.dataset.product = title || '';
-      waModal.dataset.image = decoded || '';
-      document.getElementById('waPromptProduct').textContent = title || '';
-      document.getElementById('waPromptMessage').value = document.getElementById('userMessage')?.value || '';
-      document.getElementById('waPromptLocation').value = document.getElementById('userLocation')?.value || '';
-      waModal.classList.remove('hidden'); waModal.classList.add('flex');
-    });
+            document.getElementById('waDetectLocation')?.addEventListener('click', function() {
+              const btn = this;
+              btn.disabled = true;
+              const lang = localStorage.getItem('preferredLanguage') || document.documentElement.lang || 'en';
+              btn.textContent = (viewTranslations[lang] && viewTranslations[lang]['wa-detecting']) || 'Detecting...';
+              if (!navigator.geolocation) {
+                alert('Geolocation not supported by your browser');
+                btn.disabled = false; btn.textContent = (viewTranslations[lang] && viewTranslations[lang]['wa-detect']) || 'Detect location';
+                return;
+              }
+              navigator.geolocation.getCurrentPosition(function(pos) {
+                const lat = pos.coords.latitude.toFixed(5);
+                const lon = pos.coords.longitude.toFixed(5);
+                document.getElementById('waPromptLocation').value = `${lat}, ${lon}`;
+                btn.disabled = false; btn.textContent = (viewTranslations[lang] && viewTranslations[lang]['wa-detect']) || 'Detect location';
+              }, function(err) {
+                alert('Erreur detection: ' + err.message);
+                btn.disabled = false; btn.textContent = (viewTranslations[lang] && viewTranslations[lang]['wa-detect']) || 'Detect location';
+              }, {timeout:10000});
+            });
 
-    document.getElementById('openPreview').addEventListener('click', () => {
-      window.open(decoded, '_blank');
-    });
-
-  } else {
-    img.alt = 'Aucune image fournie';
-  }
-</script>
-</body>
-</html>
-
-<!-- WhatsApp prompt modal -->
-<div id="waPromptModal" class="hidden fixed inset-0 z-50 items-center justify-center bg-black/60">
-  <div class="bg-white rounded p-4 max-w-md w-full mx-4 text-black">
-    <h3 class="font-bold text-lg mb-2">Demande - Envoyer sou WhatsApp</h3>
-    <p class="text-sm text-gray-600 mb-2">Produit: <span id="waPromptProduct" class="font-semibold"></span></p>
-    <label class="block text-sm font-medium">Mesaj (opsyonèl)</label>
-    <textarea id="waPromptMessage" rows="3" class="w-full p-2 border rounded mb-2"></textarea>
-    <label class="block text-sm font-medium">Localisation (opsyonèl)</label>
-    <div class="flex gap-2 mb-4">
-      <input id="waPromptLocation" class="flex-1 p-2 border rounded" />
-      <button id="waDetectLocation" class="px-3 py-2 rounded bg-gray-200 text-sm">Detecter localisation</button>
-    </div>
-    <div class="flex justify-end gap-2">
-      <button id="waCancel" class="px-4 py-2 rounded bg-gray-200">Anile</button>
-      <button id="waSend" class="px-4 py-2 rounded bg-green-600 text-white">Voye sou WhatsApp</button>
-    </div>
-  </div>
-</div>
-
-<script>
-  // Modal handlers for view_image page (with geolocation detect)
-  document.addEventListener('DOMContentLoaded', function() {
-    const waModal = document.getElementById('waPromptModal');
-    if (!waModal) return;
-    document.getElementById('waCancel')?.addEventListener('click', function() {
-      waModal.classList.add('hidden'); waModal.classList.remove('flex');
-    });
-
-    document.getElementById('waDetectLocation')?.addEventListener('click', function() {
-      const btn = this;
-      btn.disabled = true;
-      btn.textContent = 'Detecting...';
-      if (!navigator.geolocation) {
-        alert('Geolocation not supported by your browser');
-        btn.disabled = false; btn.textContent = 'Detecter localisation';
-        return;
-      }
-      navigator.geolocation.getCurrentPosition(function(pos) {
-        const lat = pos.coords.latitude.toFixed(5);
-        const lon = pos.coords.longitude.toFixed(5);
-        document.getElementById('waPromptLocation').value = `${lat}, ${lon}`;
-        btn.disabled = false; btn.textContent = 'Detecter localisation';
-      }, function(err) {
-        alert('Erreur detection: ' + err.message);
-        btn.disabled = false; btn.textContent = 'Detecter localisation';
-      }, {timeout:10000});
-    });
-
-    document.getElementById('waSend')?.addEventListener('click', function() {
-      const product = waModal.dataset.product || '';
-      const image = waModal.dataset.image || '';
-      const msg = document.getElementById('waPromptMessage').value || '';
-      const loc = document.getElementById('waPromptLocation').value || '';
-      waModal.classList.add('hidden'); waModal.classList.remove('flex');
-      // Build final message and open WhatsApp
+            document.getElementById('waSend')?.addEventListener('click', function() {
+              const product = waModal.dataset.product || '';
+              const image = waModal.dataset.image || '';
+              const fullName = document.getElementById('waPromptFullName').value || '';
+              const msg = document.getElementById('waPromptMessage').value || '';
+              const loc = document.getElementById('waPromptLocation').value || '';
+              waModal.classList.add('hidden'); waModal.classList.remove('flex');
+              // Build final message and open WhatsApp
+              const origin = window.location.origin || 'http://127.0.0.1:5500';
+              const imageFull = `${origin}/${image}`;
+              const imageLink = `${origin}/view_image.html?src=${encodeURIComponent(imageFull)}`;
+              let whatsappText = `*BURNIE SHOP - Demande de Produit*\n\n`;
+              if (fullName) whatsappText += `*Nom complet / Full name:* ${fullName}\n\n`;
+              whatsappText += `*Produit:* ${product}\n\n`;
+              if (msg) whatsappText += `*Message:*\n${msg}\n\n`;
+              if (loc) {
+                let mapsUrl = '';
+                const coordMatch = loc.match(/\s*([-+]?\d+\.?\d*)\s*,\s*([-+]?\d+\.?\d*)\s*/);
+                if (coordMatch) {
+                  mapsUrl = `https://www.google.com/maps/search/?api=1&query=${coordMatch[1]},${coordMatch[2]}`;
+                } else if (/^https?:\/\//i.test(loc)) {
+                  mapsUrl = loc;
+                } else {
+                  mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(loc)}`;
+                }
+                whatsappText += `*Localisation:*\n${mapsUrl}\n\n`;
+              }
+              whatsappText += imageLink;
+              const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+              if (isMobile) {
+                window.open(`https://wa.me/50932242766?text=${encodeURIComponent(whatsappText)}`, '_blank');
+              } else {
+                window.open(`https://web.whatsapp.com/send?phone=50932242766&text=${encodeURIComponent(whatsappText)}`, '_blank');
+              }
+            });
+          });
+        </script>
       const origin = window.location.origin || 'http://127.0.0.1:5500';
       const imageFull = `${origin}/${image}`;
       const imageLink = `${origin}/view_image.html?src=${encodeURIComponent(imageFull)}`;

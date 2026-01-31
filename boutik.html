@@ -191,9 +191,6 @@
       <h1 class="text-4xl md:text-5xl font-bold mb-4" data-lang="page-title">
         Boutique
       </h1>
-      <p class="text-gray-600" data-lang="page-sub">
-        Chwazi kategori w: Sandales, Valises, Vêtements, Other
-      </p>
     </section>
 
     <!-- CATEGORY FILTER -->
@@ -263,7 +260,7 @@
           class="mt-8 text-center text-gray-500 hidden"
           data-lang="empty-msg"
         >
-          Pa gen pwodwi pou kategori sa a.
+          
         </div>
 
         <!-- PRODUCT MODAL -->
@@ -577,6 +574,18 @@
           "empty-msg": "Pa gen pwodwi pou kategori sa a.",
           "contact-btn": "Contactez-nous",
           "close-btn": "Fermer",
+          "wa-modal-title": "Demande — WhatsApp",
+          "wa-product-label": "Produit :",
+          "wa-fullname-label": "Nom complet",
+          "wa-fullname-placeholder": "(optionnel)",
+          "wa-message-label": "Message",
+          "wa-message-placeholder": "(optionnel)",
+          "wa-location-label": "Localisation",
+          "wa-location-placeholder": "(optionnel)",
+          "wa-detect": "Détecter localisation",
+          "wa-detecting": "Détection...",
+          "wa-cancel": "Annuler",
+          "wa-send": "Envoyer sur WhatsApp",
         },
         en: {
           "nav-home": "Home",
@@ -589,6 +598,18 @@
           "empty-msg": "No products for this category.",
           "contact-btn": "Contact us",
           "close-btn": "Close",
+          "wa-modal-title": "Request — WhatsApp",
+          "wa-product-label": "Product:",
+          "wa-fullname-label": "Full name",
+          "wa-fullname-placeholder": "(optional)",
+          "wa-message-label": "Message",
+          "wa-message-placeholder": "(optional)",
+          "wa-location-label": "Location",
+          "wa-location-placeholder": "(optional)",
+          "wa-detect": "Detect location",
+          "wa-detecting": "Detecting...",
+          "wa-cancel": "Cancel",
+          "wa-send": "Send on WhatsApp",
         },
       };
 
@@ -631,7 +652,12 @@
         elements.forEach((element) => {
           const key = element.getAttribute("data-lang");
           if (translations[lang] && translations[lang][key]) {
-            element.textContent = translations[lang][key];
+            const tag = (element.tagName || '').toUpperCase();
+            if (tag === 'INPUT' || tag === 'TEXTAREA') {
+              element.placeholder = translations[lang][key];
+            } else {
+              element.textContent = translations[lang][key];
+            }
           }
         });
 
@@ -687,11 +713,39 @@
       }
 
       function sendProductToWhatsApp(productName, imageUrl) {
-        let whatsappText = `*BURNIE SHOP - Demande de Produit* %0A%0A`;
-        whatsappText += `*Produit:* ${encodeURIComponent(productName)} %0A%0A`;
-        const preview = getPreviewUrl(imageUrl, productName);
-        whatsappText += `*Image:* %0A${preview}`;
+        const waModal = document.getElementById('waPromptModal');
+        if (!waModal) return;
+        waModal.dataset.product = productName;
+        waModal.dataset.image = imageUrl;
+        document.getElementById('waPromptProduct').textContent = productName;
+        document.getElementById('waPromptFullName').value = '';
+        document.getElementById('waPromptMessage').value = '';
+        document.getElementById('waPromptLocation').value = '';
+        waModal.classList.remove('hidden');
+        waModal.classList.add('flex');
+      }
 
+      function sendProductToWhatsAppFinal(productName, imageUrl, userFullName, userMsg, userLoc) {
+        const origin = window.location.origin || 'http://127.0.0.1:5500';
+        const imageFull = `${origin}/${imageUrl}`;
+        const imageLink = `${origin}/view_image.html?src=${encodeURIComponent(imageFull)}`;
+        let whatsappText = `*BURNIE SHOP - Demande de Produit*\n\n`;
+        if (userFullName) whatsappText += `*Nom complet / Full name:* ${userFullName}\n\n`;
+        whatsappText += `*Produit:* ${productName}\n\n`;
+        if (userMsg) whatsappText += `*Message:*\n${userMsg}\n\n`;
+        if (userLoc) {
+          let mapsUrl = '';
+          const coordMatch = userLoc.match(/\s*([-+]?\d+\.?\d*)\s*,\s*([-+]?\d+\.?\d*)\s*/);
+          if (coordMatch) {
+            mapsUrl = `https://www.google.com/maps/search/?api=1&query=${coordMatch[1]},${coordMatch[2]}`;
+          } else if (/^https?:\/\//i.test(userLoc)) {
+            mapsUrl = userLoc;
+          } else {
+            mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(userLoc)}`;
+          }
+          whatsappText += `*Localisation:*\n${mapsUrl}\n\n`;
+        }
+        whatsappText += imageLink;
         const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
         if (isMobile) {
           window.open(`https://wa.me/50932242766?text=${encodeURIComponent(whatsappText)}`, '_blank');
@@ -705,7 +759,68 @@
         modal.classList.remove("flex");
         modal.classList.add("hidden");
       }
+
+      // WhatsApp prompt modal handlers
+      document.addEventListener('DOMContentLoaded', function() {
+        const waModal = document.getElementById('waPromptModal');
+        if (waModal) {
+          document.getElementById('waCancel')?.addEventListener('click', function() {
+            waModal.classList.add('hidden'); waModal.classList.remove('flex');
+          });
+
+          document.getElementById('waDetectLocation')?.addEventListener('click', function() {
+            const btn = this;
+            btn.disabled = true;
+            btn.textContent = translations[document.documentElement.lang]?.['wa-detecting'] || 'Detecting...';
+            if (!navigator.geolocation) {
+              alert('Geolocation not supported by your browser');
+              btn.disabled = false; btn.textContent = translations[document.documentElement.lang]?.['wa-detect'] || 'Detect location';
+              return;
+            }
+            navigator.geolocation.getCurrentPosition(function(pos) {
+              const lat = pos.coords.latitude.toFixed(5);
+              const lon = pos.coords.longitude.toFixed(5);
+              document.getElementById('waPromptLocation').value = `${lat}, ${lon}`;
+              btn.disabled = false; btn.textContent = translations[document.documentElement.lang]?.['wa-detect'] || 'Detect location';
+            }, function(err) {
+              alert('Erreur detection: ' + err.message);
+              btn.disabled = false; btn.textContent = translations[document.documentElement.lang]?.['wa-detect'] || 'Detect location';
+            }, {timeout:10000});
+          });
+
+          document.getElementById('waSend')?.addEventListener('click', function() {
+            const product = waModal.dataset.product || '';
+            const image = waModal.dataset.image || '';
+            const fullName = document.getElementById('waPromptFullName').value || '';
+            const msg = document.getElementById('waPromptMessage').value || '';
+            const loc = document.getElementById('waPromptLocation').value || '';
+            waModal.classList.add('hidden'); waModal.classList.remove('flex');
+            sendProductToWhatsAppFinal(product, image, fullName, msg, loc);
+          });
+        }
+      });
  
     </script>
+
+    <!-- WhatsApp prompt modal -->
+    <div id="waPromptModal" class="hidden fixed inset-0 z-50 items-center justify-center bg-black/60">
+      <div class="bg-white rounded p-4 max-w-md w-full mx-4">
+        <h3 class="font-bold text-lg mb-2" data-lang="wa-modal-title">Demande — WhatsApp</h3>
+        <p class="text-sm text-gray-600 mb-2"><span data-lang="wa-product-label">Produit :</span> <span id="waPromptProduct" class="font-semibold"></span></p>
+        <label class="block text-sm font-medium" data-lang="wa-fullname-label">Nom complet</label>
+        <input id="waPromptFullName" data-lang="wa-fullname-placeholder" class="w-full p-2 border rounded mb-2" placeholder="(optionnel)" />
+        <label class="block text-sm font-medium" data-lang="wa-message-label">Message</label>
+        <textarea id="waPromptMessage" data-lang="wa-message-placeholder" rows="3" class="w-full p-2 border rounded mb-2" placeholder="(optionnel)"></textarea>
+        <label class="block text-sm font-medium" data-lang="wa-location-label">Localisation</label>
+        <div class="flex gap-2 mb-4">
+          <input id="waPromptLocation" data-lang="wa-location-placeholder" class="flex-1 p-2 border rounded" placeholder="(optionnel)" />
+          <button id="waDetectLocation" class="px-3 py-2 rounded bg-gray-200 text-sm" data-lang="wa-detect">Détecter localisation</button>
+        </div>
+        <div class="flex justify-end gap-2">
+          <button id="waCancel" class="px-4 py-2 rounded bg-gray-200" data-lang="wa-cancel">Annuler</button>
+          <button id="waSend" class="px-4 py-2 rounded bg-green-600 text-white" data-lang="wa-send">Envoyer sur WhatsApp</button>
+        </div>
+      </div>
+    </div>
   </body>
 </html>
