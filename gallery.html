@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Hair Gallery - BURNIE-SHOP</title>
+    <title>Galerie de Cheveux - Boutique</title>
     <link rel="shortcut icon" href="./fille.jpeg" />
 
     <!-- Tailwind CDN -->
@@ -137,10 +137,32 @@
         <a href="index.html" class="font-semibold hover:text-gold transition"
           >Home</a
         >
-        <a href="gallery.html" class="font-semibold text-gold">Gallery</a>
-        <a href="contact.html" class="font-semibold hover:text-gold transition"
+        <a href="gallery.html" class="font-semibold text-gold" data-lang="nav-gallery">Gallery</a>
+        <a href="contact.html" class="font-semibold hover:text-gold transition" data-lang="nav-contact"
           >Contact</a
         >
+        <a
+          href="boutik.html"
+          class="font-semibold hover:text-gold transition"
+          data-lang="nav-boutik"
+          >Boutique</a
+        >
+        <div class="flex gap-2 ml-4">
+          <button
+            onclick="switchLanguage('fr')"
+            class="px-3 py-1 text-sm font-semibold border-2 border-gold text-gold hover:bg-gold hover:text-black transition"
+            id="lang-fr"
+          >
+            FR
+          </button>
+          <button
+            onclick="switchLanguage('en')"
+            class="px-3 py-1 text-sm font-semibold border-2 border-gray-300 text-gray-600 hover:bg-gray-300 hover:text-black transition"
+            id="lang-en"
+          >
+            EN
+          </button>
+        </div>
       </div>
     </nav>
 
@@ -189,22 +211,48 @@
           <a
             href="index.html"
             class="block py-3 px-4 rounded-lg hover:bg-gray-100 transition font-medium"
+            data-lang="nav-home"
             >Home</a
+          >
+          <a
+            href="boutik.html"
+            class="block py-3 px-4 rounded-lg hover:bg-gray-100 transition font-medium"
+            data-lang="nav-boutik"
+            >Boutique</a
           >
           <a
             href="gallery.html"
             class="block py-3 px-4 rounded-lg bg-gold text-black font-medium"
+            data-lang="nav-gallery"
             >Gallery</a
           >
           <a
             href="contact.html"
             class="block py-3 px-4 rounded-lg hover:bg-gray-100 transition font-medium"
+            data-lang="nav-contact"
             >Contact</a
           >
         </nav>
 
         <div class="mt-8 pt-6 border-t">
-          <h3 class="font-semibold mb-4">Follow Us</h3>
+          <h3 class="font-semibold mb-4" data-lang="sidebar-lang">Language</h3>
+          <div class="flex justify-center gap-2 mb-6">
+            <button
+              onclick="switchLanguage('fr'); closeSidebar()"
+              class="px-4 py-2 text-sm font-semibold border-2 border-gold text-gold hover:bg-gold hover:text-black transition"
+              id="lang-fr-mobile"
+            >
+              FR
+            </button>
+            <button
+              onclick="switchLanguage('en'); closeSidebar()"
+              class="px-4 py-2 text-sm font-semibold border-2 border-gray-300 text-gray-600 hover:bg-gray-300 hover:text-black transition"
+              id="lang-en-mobile"
+            >
+              EN
+            </button>
+          </div>
+          <h3 class="font-semibold mb-4" data-lang="sidebar-follow">Follow Us</h3>
           <div class="flex gap-4">
             <a
               href="https://www.facebook.com/share/1AkCdm1ixj/"
@@ -33100,7 +33148,7 @@
           </div>
         </div>
         <div class="border-t border-gray-800 pt-8 text-center text-gray-500">
-          <p>&copy; 2026 BURNIE-SHOP. All rights reserved.</p>
+          <p>&copy; 2026 Boutique. All rights reserved.</p>
         </div>
       </div>
     </footer>
@@ -37790,7 +37838,66 @@
         // set contact link with product details so contact page can prefill
         const contactBtn = document.getElementById("modalContactBtn");
         if (contactBtn) {
-          contactBtn.href = `contact.html?product=${encodeURIComponent(product.title)}&image=${encodeURIComponent(product.image)}`;
+          contactBtn.href = "#";
+          contactBtn.onclick = function(e) {
+            e.preventDefault();
+            sendProductToWhatsApp(product.title, product.image);
+          };
+        }
+      }
+
+      function getPreviewUrl(imageUrl, title) {
+        if (!imageUrl) return '';
+        try {
+          const origin = window.location.origin || (location.protocol + '//' + location.host);
+          const q = 'src=' + encodeURIComponent(imageUrl) + (title ? '&title=' + encodeURIComponent(title) : '');
+          return origin + '/view_image.html?' + q;
+        } catch (e) {
+          return 'view_image.html?src=' + encodeURIComponent(imageUrl) + (title ? '&title=' + encodeURIComponent(title) : '');
+        }
+      }
+
+      function sendProductToWhatsApp(productName, imageUrl) {
+        // Open the prompt modal to collect optional message and location
+        const modal = document.getElementById('waPromptModal');
+        if (!modal) return alert('Modal not found');
+        modal.dataset.product = productName;
+        modal.dataset.image = imageUrl;
+        document.getElementById('waPromptProduct').textContent = productName;
+        document.getElementById('waPromptMessage').value = '';
+        document.getElementById('waPromptLocation').value = '';
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+      }
+
+      function sendProductToWhatsAppFinal(productName, imageUrl, userMsg, userLoc) {
+        const origin = window.location.origin || 'http://127.0.0.1:5500';
+        const fullImageUrl = `${origin}/${imageUrl}`;
+        const imageLink = `${origin}/view_image.html?src=${encodeURIComponent(fullImageUrl)}`;
+        let whatsappText = `*BURNIE SHOP - Demande de Produit*\n\n*Produit:* ${productName}\n\n`;
+        if (userMsg) whatsappText += `*Message:*\n${userMsg}\n\n`;
+
+        // Convert location to a Google Maps URL if provided
+        if (userLoc) {
+          let mapsUrl = '';
+          const coordMatch = userLoc.match(/\s*([-+]?\d+\.?\d*)\s*,\s*([-+]?\d+\.?\d*)\s*/);
+          if (coordMatch) {
+            mapsUrl = `https://www.google.com/maps/search/?api=1&query=${coordMatch[1]},${coordMatch[2]}`;
+          } else if (/^https?:\/\//i.test(userLoc)) {
+            mapsUrl = userLoc;
+          } else {
+            mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(userLoc)}`;
+          }
+          whatsappText += `*Localisation:*\n${mapsUrl}\n\n`;
+        }
+
+        whatsappText += imageLink;
+
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        if (isMobile) {
+          window.open(`https://wa.me/50932242766?text=${encodeURIComponent(whatsappText)}`, '_blank');
+        } else {
+          window.open(`https://web.whatsapp.com/send?phone=50932242766&text=${encodeURIComponent(whatsappText)}`, '_blank');
         }
       }
 
@@ -37798,6 +37905,32 @@
         document.getElementById("modal").classList.add("hidden");
         document.body.style.overflow = "";
       }
+
+      // Make product images clickable to view full image
+      function makeImagesClickable() {
+        const images = document.querySelectorAll('.product-card img');
+        images.forEach((img) => {
+          img.style.cursor = 'pointer';
+          img.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const imageSrc = this.src;
+            const productCard = this.closest('.product-card');
+            const productTitle = productCard ? productCard.dataset.title : 'Image';
+            
+            // Navigate to view_image.html with src parameter
+            const params = new URLSearchParams({
+              src: imageSrc,
+              title: productTitle
+            });
+            window.location.href = `view_image.html?${params.toString()}`;
+          });
+        });
+      }
+
+      // Initialize image click handlers when page loads
+      document.addEventListener('DOMContentLoaded', function() {
+        makeImagesClickable();
+      });
 
       // Close modal on backdrop click
       document.getElementById("modal")?.addEventListener("click", function (e) {
@@ -37807,6 +37940,45 @@
       // Close modal on Escape key
       document.addEventListener("keydown", function (e) {
         if (e.key === "Escape") closeModal();
+      });
+
+      // WhatsApp prompt modal handlers
+      document.addEventListener('DOMContentLoaded', function() {
+        const waModal = document.getElementById('waPromptModal');
+        if (waModal) {
+          document.getElementById('waCancel')?.addEventListener('click', function() {
+            waModal.classList.add('hidden'); waModal.classList.remove('flex');
+          });
+
+          document.getElementById('waDetectLocation')?.addEventListener('click', function() {
+            const btn = this;
+            btn.disabled = true;
+            btn.textContent = 'Detecting...';
+            if (!navigator.geolocation) {
+              alert('Geolocation not supported by your browser');
+              btn.disabled = false; btn.textContent = 'Detecter localisation';
+              return;
+            }
+            navigator.geolocation.getCurrentPosition(function(pos) {
+              const lat = pos.coords.latitude.toFixed(5);
+              const lon = pos.coords.longitude.toFixed(5);
+              document.getElementById('waPromptLocation').value = `${lat}, ${lon}`;
+              btn.disabled = false; btn.textContent = 'Detecter localisation';
+            }, function(err) {
+              alert('Erreur detection: ' + err.message);
+              btn.disabled = false; btn.textContent = 'Detecter localisation';
+            }, {timeout:10000});
+          });
+
+          document.getElementById('waSend')?.addEventListener('click', function() {
+            const product = waModal.dataset.product || '';
+            const image = waModal.dataset.image || '';
+            const msg = document.getElementById('waPromptMessage').value || '';
+            const loc = document.getElementById('waPromptLocation').value || '';
+            waModal.classList.add('hidden'); waModal.classList.remove('flex');
+            sendProductToWhatsAppFinal(product, image, msg, loc);
+          });
+        }
       });
 
       // Sidebar functions
@@ -37838,6 +38010,102 @@
           btn.classList.remove("opacity-100", "visible");
         }
       });
+
+      // Translations
+      const translations = {
+        fr: {
+          "nav-home": "Accueil",
+          "nav-boutik": "Boutique",
+          "nav-gallery": "Galerie",
+          "nav-contact": "Contact",
+          "sidebar-lang": "Langue",
+          "sidebar-follow": "Suivez-nous",
+        },
+        en: {
+          "nav-home": "Home",
+          "nav-boutik": "Boutique",
+          "nav-gallery": "Gallery",
+          "nav-contact": "Contact",
+          "sidebar-lang": "Language",
+          "sidebar-follow": "Follow Us",
+        },
+      };
+
+      function switchLanguage(lang) {
+        // Update button styles
+        const frBtn = document.getElementById("lang-fr");
+        const enBtn = document.getElementById("lang-en");
+        const frBtnMobile = document.getElementById("lang-fr-mobile");
+        const enBtnMobile = document.getElementById("lang-en-mobile");
+
+        if (lang === "fr") {
+          if (frBtn && enBtn) {
+            frBtn.classList.add("border-gold", "text-gold");
+            frBtn.classList.remove("border-gray-300", "text-gray-600");
+            enBtn.classList.add("border-gray-300", "text-gray-600");
+            enBtn.classList.remove("border-gold", "text-gold");
+          }
+          if (frBtnMobile && enBtnMobile) {
+            frBtnMobile.classList.add("border-gold", "text-gold");
+            frBtnMobile.classList.remove("border-gray-300", "text-gray-600");
+            enBtnMobile.classList.add("border-gray-300", "text-gray-600");
+            enBtnMobile.classList.remove("border-gold", "text-gold");
+          }
+        } else {
+          if (enBtn && frBtn) {
+            enBtn.classList.add("border-gold", "text-gold");
+            enBtn.classList.remove("border-gray-300", "text-gray-600");
+            frBtn.classList.add("border-gray-300", "text-gray-600");
+            frBtn.classList.remove("border-gold", "text-gold");
+          }
+          if (enBtnMobile && frBtnMobile) {
+            enBtnMobile.classList.add("border-gold", "text-gold");
+            enBtnMobile.classList.remove("border-gray-300", "text-gray-600");
+            frBtnMobile.classList.add("border-gray-300", "text-gray-600");
+            frBtnMobile.classList.remove("border-gold", "text-gold");
+          }
+        }
+
+        // Update text content
+        const elements = document.querySelectorAll("[data-lang]");
+        elements.forEach((element) => {
+          const key = element.getAttribute("data-lang");
+          if (translations[lang][key]) {
+            element.textContent = translations[lang][key];
+          }
+        });
+
+        // Update document language
+        document.documentElement.lang = lang;
+
+        // Store language preference
+        localStorage.setItem("preferredLanguage", lang);
+      }
+
+      // Initialize with saved language preference
+      document.addEventListener("DOMContentLoaded", () => {
+        const savedLang = localStorage.getItem("preferredLanguage") || "en";
+        switchLanguage(savedLang);
+      });
     </script>
   </body>
 </html>
+
+<!-- WhatsApp prompt modal -->
+<div id="waPromptModal" class="hidden fixed inset-0 z-50 items-center justify-center bg-black/60">
+  <div class="bg-white rounded p-4 max-w-md w-full mx-4">
+    <h3 class="font-bold text-lg mb-2">Demande - Envoyer sur WhatsApp / Request - Send via WhatsApp</h3>
+    <p class="text-sm text-gray-600 mb-2">Produit / Product: <span id="waPromptProduct" class="font-semibold"></span></p>
+    <label class="block text-sm font-medium">Message (optionnel) / Message (optional)</label>
+    <textarea id="waPromptMessage" rows="3" class="w-full p-2 border rounded mb-2"></textarea>
+    <label class="block text-sm font-medium">Localisation (optionnel) / Location (optional)</label>
+    <div class="flex gap-2 mb-4">
+      <input id="waPromptLocation" class="flex-1 p-2 border rounded" />
+      <button id="waDetectLocation" class="px-3 py-2 rounded bg-gray-200 text-sm">Détecter localisation / Detect location</button>
+    </div>
+    <div class="flex justify-end gap-2">
+      <button id="waCancel" class="px-4 py-2 rounded bg-gray-200">Annuler / Cancel</button>
+      <button id="waSend" class="px-4 py-2 rounded bg-green-600 text-white">Envoyer sur WhatsApp / Send via WhatsApp</button>
+    </div>
+  </div>
+</div>

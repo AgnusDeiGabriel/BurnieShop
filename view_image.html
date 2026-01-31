@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Image Preview - BurnieShop</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-white flex items-center justify-center min-h-screen p-4">
+  <div class="max-w-4xl w-full">
+    <div id="controls" class="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 mb-4">
+      <div class="flex-1 w-full">
+        <h2 id="imageTitle" class="text-lg font-bold mb-2">Image</h2>
+        <p id="imageCaption" class="text-sm text-gray-300 mb-2"></p>
+      </div>
+      <div class="flex gap-2">
+        <a id="downloadBtn" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded">Télécharger</a>
+        <button id="copyBtn" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">Copier le lien</button>
+        <a id="openOriginal" class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded">Ouvrir l'image</a>
+      </div>
+    </div>
+    <div class="bg-white rounded overflow-hidden mb-4">
+      <img id="previewImage" src="" alt="Preview" class="w-full h-auto object-contain bg-black" />
+    </div>
+
+    <div class="bg-white p-4 rounded">
+      <label class="block text-sm font-semibold mb-1">Votre message</label>
+      <textarea id="userMessage" rows="4" class="w-full p-2 border rounded mb-3" placeholder="Écrivez votre message..."></textarea>
+
+      <label class="block text-sm font-semibold mb-1">Localisation</label>
+      <input id="userLocation" class="w-full p-2 border rounded mb-3" placeholder="Ex: Port-au-Prince, Haiti" />
+
+      <div class="flex gap-2">
+        <button id="sendWhatsApp" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded">Envoyer sur WhatsApp</button>
+        <button id="openPreview" class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded">Ouvrir image seule</button>
+      </div>
+    </div>
+  </div>
+
+<script>
+  function getParam(name) {
+    const params = new URLSearchParams(window.location.search);
+    return params.get(name) || '';
+  }
+
+  const src = getParam('src');
+  const img = document.getElementById('previewImage');
+  const openOriginal = document.getElementById('openOriginal');
+  const downloadBtn = document.getElementById('downloadBtn');
+  const copyBtn = document.getElementById('copyBtn');
+
+  const title = getParam('title');
+  if (title) {
+    document.getElementById('imageTitle').textContent = title;
+    document.getElementById('imageCaption').textContent = `Produit: ${title}`;
+  }
+
+  if (src) {
+    const decoded = decodeURIComponent(src);
+    img.src = decoded;
+    openOriginal.href = decoded;
+    openOriginal.target = '_blank';
+    downloadBtn.href = decoded;
+    downloadBtn.setAttribute('download','image');
+    copyBtn.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(decoded);
+        copyBtn.textContent = 'Lien copié ✅';
+        setTimeout(()=>copyBtn.textContent='Copier le lien',1500);
+      } catch (e) {
+        copyBtn.textContent = 'Erreur';
+      }
+    });
+
+    document.getElementById('openPreview').addEventListener('click', () => {
+      window.open(decoded, '_blank');
+    });
+
+    document.getElementById('sendWhatsApp').addEventListener('click', () => {
+      // Open small prompt modal to collect message and location before sending
+      const waModal = document.getElementById('waPromptModal');
+      if (!waModal) return alert('Modal not found');
+      waModal.dataset.product = title || '';
+      waModal.dataset.image = decoded || '';
+      document.getElementById('waPromptProduct').textContent = title || '';
+      document.getElementById('waPromptMessage').value = document.getElementById('userMessage')?.value || '';
+      document.getElementById('waPromptLocation').value = document.getElementById('userLocation')?.value || '';
+      waModal.classList.remove('hidden'); waModal.classList.add('flex');
+    });
+
+    document.getElementById('openPreview').addEventListener('click', () => {
+      window.open(decoded, '_blank');
+    });
+
+  } else {
+    img.alt = 'Aucune image fournie';
+  }
+</script>
+</body>
+</html>
+
+<!-- WhatsApp prompt modal -->
+<div id="waPromptModal" class="hidden fixed inset-0 z-50 items-center justify-center bg-black/60">
+  <div class="bg-white rounded p-4 max-w-md w-full mx-4 text-black">
+    <h3 class="font-bold text-lg mb-2">Demande - Envoyer sou WhatsApp</h3>
+    <p class="text-sm text-gray-600 mb-2">Produit: <span id="waPromptProduct" class="font-semibold"></span></p>
+    <label class="block text-sm font-medium">Mesaj (opsyonèl)</label>
+    <textarea id="waPromptMessage" rows="3" class="w-full p-2 border rounded mb-2"></textarea>
+    <label class="block text-sm font-medium">Localisation (opsyonèl)</label>
+    <div class="flex gap-2 mb-4">
+      <input id="waPromptLocation" class="flex-1 p-2 border rounded" />
+      <button id="waDetectLocation" class="px-3 py-2 rounded bg-gray-200 text-sm">Detecter localisation</button>
+    </div>
+    <div class="flex justify-end gap-2">
+      <button id="waCancel" class="px-4 py-2 rounded bg-gray-200">Anile</button>
+      <button id="waSend" class="px-4 py-2 rounded bg-green-600 text-white">Voye sou WhatsApp</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Modal handlers for view_image page (with geolocation detect)
+  document.addEventListener('DOMContentLoaded', function() {
+    const waModal = document.getElementById('waPromptModal');
+    if (!waModal) return;
+    document.getElementById('waCancel')?.addEventListener('click', function() {
+      waModal.classList.add('hidden'); waModal.classList.remove('flex');
+    });
+
+    document.getElementById('waDetectLocation')?.addEventListener('click', function() {
+      const btn = this;
+      btn.disabled = true;
+      btn.textContent = 'Detecting...';
+      if (!navigator.geolocation) {
+        alert('Geolocation not supported by your browser');
+        btn.disabled = false; btn.textContent = 'Detecter localisation';
+        return;
+      }
+      navigator.geolocation.getCurrentPosition(function(pos) {
+        const lat = pos.coords.latitude.toFixed(5);
+        const lon = pos.coords.longitude.toFixed(5);
+        document.getElementById('waPromptLocation').value = `${lat}, ${lon}`;
+        btn.disabled = false; btn.textContent = 'Detecter localisation';
+      }, function(err) {
+        alert('Erreur detection: ' + err.message);
+        btn.disabled = false; btn.textContent = 'Detecter localisation';
+      }, {timeout:10000});
+    });
+
+    document.getElementById('waSend')?.addEventListener('click', function() {
+      const product = waModal.dataset.product || '';
+      const image = waModal.dataset.image || '';
+      const msg = document.getElementById('waPromptMessage').value || '';
+      const loc = document.getElementById('waPromptLocation').value || '';
+      waModal.classList.add('hidden'); waModal.classList.remove('flex');
+      // Build final message and open WhatsApp
+      const origin = window.location.origin || 'http://127.0.0.1:5500';
+      const imageFull = `${origin}/${image}`;
+      const imageLink = `${origin}/view_image.html?src=${encodeURIComponent(imageFull)}`;
+      let whatsappText = `*BURNIE SHOP - Demande de Produit*\n\n*Produit:* ${product}\n\n`;
+      if (msg) whatsappText += `*Message:*\n${msg}\n\n`;
+      if (loc) {
+        let mapsUrl = '';
+        const coordMatch = loc.match(/\s*([-+]?\d+\.?\d*)\s*,\s*([-+]?\d+\.?\d*)\s*/);
+        if (coordMatch) {
+          mapsUrl = `https://www.google.com/maps/search/?api=1&query=${coordMatch[1]},${coordMatch[2]}`;
+        } else if (/^https?:\/\//i.test(loc)) {
+          mapsUrl = loc;
+        } else {
+          mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(loc)}`;
+        }
+        whatsappText += `*Localisation:*\n${mapsUrl}\n\n`;
+      }
+      whatsappText += imageLink;
+      const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+      if (isMobile) {
+        window.open(`https://wa.me/50932242766?text=${encodeURIComponent(whatsappText)}`, '_blank');
+      } else {
+        window.open(`https://web.whatsapp.com/send?phone=50932242766&text=${encodeURIComponent(whatsappText)}`, '_blank');
+      }
+    });
+  });
+</script>

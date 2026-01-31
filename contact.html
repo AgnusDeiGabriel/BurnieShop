@@ -25,17 +25,26 @@
           const img = document.getElementById('prefillImage');
           const name = document.getElementById('prefillName');
           const note = document.getElementById('prefillNote');
+          const detail1 = document.getElementById('prefillDetail1');
+          const detail2 = document.getElementById('prefillDetail2');
+          const detail3 = document.getElementById('prefillDetail3');
 
           if (img && image) img.src = image;
           if (name) name.textContent = product;
           if (note) note.textContent = 'Produit sélectionné pour contact';
+          
+          // Add product details as list items (without image URL)
+          if (detail1) detail1.textContent = `Produit: ${product}`;
+          if (detail2) detail2.textContent = `Catégorie: Produit BurnieShop`;
+          if (detail3) detail3.textContent = `Demande: ${new Date().toLocaleDateString('fr-FR')}`;
+          
           if (preview) preview.classList.remove('hidden');
 
           // Prefill subject and message
           const subject = document.getElementById('contactSubject');
           const message = document.getElementById('contactMessage');
           if (subject) subject.value = 'question';
-          if (message) message.value = `Bonjour, je suis intéressé par: ${product}\n\nImage: ${image}`;
+          if (message) message.value = `Bonjour, je suis intéressé par: ${product}`;
         }
       } catch (e) {
         // ignore
@@ -43,16 +52,7 @@
       }
     });
   </script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            primary: '#000000',
-            gold: '#d4af37'
-          }
-        }
-      }
-    }
+    
   </script>
 </head>
 <body class="bg-gray-50 text-gray-900">
@@ -85,6 +85,7 @@
     <h2 class="text-xl font-bold mb-6 text-center">Menu</h2>
     <div class="space-y-4">
       <a href="index.html" class="block py-2 px-4 rounded hover:bg-gray-100 transition" onclick="closeSidebar()">Accueil</a>
+      <a href="boutik.html" class="block py-2 px-4 rounded hover:bg-gray-100 transition" onclick="closeSidebar()">Boutique</a>
       <a href="gallery.html" class="block py-2 px-4 rounded hover:bg-gray-100 transition" onclick="closeSidebar()">Galerie</a>
       <a href="contact.html" class="block py-2 px-4 rounded bg-gold text-black" onclick="closeSidebar()">Contact</a>
     </div>
@@ -169,20 +170,8 @@
         </a>
       </div>
 
-      <!-- Purchase Lan Pito (quick) -->
-      <div class="bg-white p-5 md:p-8 rounded-xl shadow-lg hover:shadow-xl transition mb-4 md:mb-6">
-        <div class="flex items-center mb-4">
-          <div class="text-3xl md:text-4xl mr-3 md:mr-4">🛒</div>
-          <div>
-            <h3 class="text-xl md:text-2xl font-bold">Acheter — Lan Pito</h3>
-            <p class="text-gray-600 text-sm md:text-base">Intéressé? Contactez-nous directement pour acheter "Lan Pito".</p>
-          </div>
-        </div>
-        <p class="text-gray-700 mb-4 text-sm md:text-base">Cliquez ci-dessous pour démarrer une conversation WhatsApp pré-remplie pour l'achat.</p>
-        <a href="https://wa.me/50932242766?text=Bonjour%2C%20mwen%20vle%20achte%20Lan%20Pito%20-%20tanpri%20bay%20m%20plis%20enfòmasyon" target="_blank" class="inline-block bg-black text-white px-4 md:px-6 py-2 md:py-3 rounded-lg font-bold hover:bg-gold hover:text-black transition text-sm md:text-base">
-          🛒 Achte Lan Pito
-        </a>
-      </div>
+      <!-- Purchase BurnieShop (quick) -->
+      <div class="bg-white p-5 md:p-8 rounded-xl shadow-lg hover:shadow-xl transition mb-4 md:mb-6 hidden">
 
     </div>
 
@@ -191,13 +180,52 @@
       <h2 class="text-2xl md:text-3xl font-bold mb-6 md:mb-8" data-lang="contact-form-title">Formulaire de Contact</h2>
 
       <!-- Product preview (prefilled when coming from product link) -->
-      <div id="prefillProduct" class="bg-white p-5 md:p-8 rounded-xl shadow-lg mb-6 hidden">
-        <div class="flex gap-4 items-center">
-          <img id="prefillImage" src="" alt="" class="w-32 h-32 object-cover rounded" />
-          <div>
-            <p id="prefillName" class="font-bold"></p>
-            <p id="prefillNote" class="text-sm text-gray-600">Produit sélectionné</p>
+      <div id="prefillProduct" class="bg-white p-5 md:p-8 rounded-xl shadow-lg mb-6 hidden hover:shadow-xl transition">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 items-start">
+          <!-- Large Image Display -->
+          <div class="col-span-1 md:col-span-2">
+            <div class="relative group">
+              <img id="prefillImage" src="" alt="" class="w-full h-auto object-cover rounded cursor-pointer shadow-lg hover:shadow-xl transition" onclick="viewImageModal()" />
+              <div class="absolute inset-0 flex items-center justify-center bg-black/0 group-hover:bg-black/30 transition rounded">
+                <span class="text-white text-lg font-bold opacity-0 group-hover:opacity-100 transition">👁️ Voir en grand</span>
+              </div>
+              <button onclick="downloadImage()" type="button" class="absolute bottom-0 left-0 right-0 bg-black/70 text-white text-xs py-2 px-2 rounded-b opacity-0 group-hover:opacity-100 transition text-center font-semibold">
+                📥 Télécharger
+              </button>
+            </div>
           </div>
+          <!-- Product Details -->
+          <div class="col-span-1">
+            <h3 id="prefillName" class="font-bold text-lg mb-2"></h3>
+            <p id="prefillNote" class="text-sm text-gray-600 mb-3">Produit sélectionné</p>
+            <ul id="prefillDetails" class="list-disc list-inside text-sm text-gray-700 space-y-1 mb-4">
+              <li id="prefillDetail1"></li>
+              <li id="prefillDetail2"></li>
+              <li id="prefillDetail3"></li>
+            </ul>
+            <div class="flex flex-col gap-2">
+              <button onclick="viewImageModal()" type="button" class="text-xs bg-gray-600 text-white px-3 py-2 rounded hover:bg-gray-700 transition w-full font-semibold">
+                👁️ Voir l'image
+              </button>
+              <button onclick="copyImageLink()" type="button" class="text-xs bg-blue-500 text-white px-3 py-2 rounded hover:bg-blue-600 transition w-full font-semibold">
+                🔗 Copier lien
+              </button>
+              <button onclick="downloadImage()" type="button" class="text-xs bg-green-500 text-white px-3 py-2 rounded hover:bg-green-600 transition w-full font-semibold">
+
+                📥 Télécharger
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Image Modal -->
+      <div id="imageModal" class="fixed inset-0 bg-black/80 z-50 hidden flex items-center justify-center p-4" onclick="closeImageModal()">
+        <div class="bg-white rounded-lg max-w-4xl max-h-[90vh] overflow-auto relative" onclick="event.stopPropagation()">
+          <button onclick="closeImageModal()" class="absolute top-4 right-4 bg-red-500 text-white px-3 py-1 rounded-full text-2xl hover:bg-red-600 transition">
+            ✕
+          </button>
+          <img id="modalImageLarge" src="" alt="" class="w-full h-auto" />
         </div>
       </div>
 
@@ -233,9 +261,14 @@
           <textarea id="contactMessage" required placeholder="Décrivez votre message ici..." rows="5" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-gold"></textarea>
         </div>
 
-        <button type="submit" class="w-full bg-black text-white py-3 rounded-lg font-bold hover:bg-gold hover:text-black transition" data-lang="contact-form-submit">
-          Envoyer le Message
-        </button>
+        <div class="flex gap-3">
+          <button type="submit" class="flex-1 bg-black text-white py-3 rounded-lg font-bold hover:bg-gold hover:text-black transition" data-lang="contact-form-submit">
+            Envoyer le Message
+          </button>
+          <button type="button" onclick="sendImageToWhatsApp()" class="flex-1 bg-green-600 text-white py-3 rounded-lg font-bold hover:bg-green-700 transition flex items-center justify-center gap-2" id="sendImageBtn" style="display:none;">
+            📸 Envoyé Image
+          </button>
+        </div>
       </form>
     </div>
 
@@ -352,6 +385,10 @@
   // Translations object
   const translations = {
     fr: {
+      'nav-home': 'Accueil',
+      'nav-boutik': 'Boutique',
+      'nav-gallery': 'Galerie',
+      'nav-contact': 'Contact',
       'contact-hero-title': 'Nous Contacter',
       'contact-hero-subtitle': 'Nous sommes disponibles 24/7 pour répondre à vos questions',
       'contact-reach-us': 'Nous Joindre',
@@ -391,6 +428,10 @@
       'footer-email': 'Email'
     },
     en: {
+      'nav-home': 'Home',
+      'nav-boutik': 'Boutique',
+      'nav-gallery': 'Gallery',
+      'nav-contact': 'Contact',
       'contact-hero-title': 'Contact Us',
       'contact-hero-subtitle': 'We are available 24/7 to answer your questions',
       'contact-reach-us': 'Reach Us',
@@ -496,6 +537,149 @@
     switchLanguage(savedLang);
   });
 
+  function sendViaWhatsApp() {
+    // Get form values
+    const message = document.getElementById('contactMessage').value || '';
+    const productImage = document.getElementById('prefillImage').src || '';
+    const productName = document.getElementById('prefillName').textContent || '';
+
+  function getPreviewUrl(imageUrl, title) {
+    if (!imageUrl) return '';
+    try {
+      const origin = window.location.origin || (location.protocol + '//' + location.host);
+      const q = 'src=' + encodeURIComponent(imageUrl) + (title ? '&title=' + encodeURIComponent(title) : '');
+      return origin + '/view_image.html?' + q;
+    } catch (e) {
+      return 'view_image.html?src=' + encodeURIComponent(imageUrl) + (title ? '&title=' + encodeURIComponent(title) : '');
+    }
+  }
+
+    // Build WhatsApp message as plain text (use newlines), encode when opening URL
+    let whatsappText = '*BURNIE SHOP - Demande de Produit*\n\n';
+
+    // Add image preview link first if available
+    if (productImage) {
+      const preview = getPreviewUrl(productImage);
+      whatsappText += preview + '\n\n';
+    }
+
+    // Add product info if available
+    if (productName) {
+      whatsappText += '*Produit:* ' + productName + '\n\n';
+    }
+
+    whatsappText += '*Message:*\n' + message;
+
+    // Open WhatsApp with pre-filled message (encode the whole message so links stay valid)
+    window.open(`https://wa.me/50932242766?text=${encodeURIComponent(whatsappText)}`, '_blank');
+  }
+
+  function copyImageLink() {
+    const imageLink = document.getElementById('prefillImage').src;
+    if (imageLink) {
+      navigator.clipboard.writeText(imageLink).then(() => {
+        alert('Lien de l\'image copié! ✅');
+      }).catch(() => {
+        alert('Erreur lors de la copie du lien');
+      });
+    }
+  }
+
+  function downloadImage() {
+    const imageLink = document.getElementById('prefillImage').src;
+    const productName = document.getElementById('prefillName').textContent || 'product';
+    
+    if (imageLink) {
+      // Create a temporary link element
+      const link = document.createElement('a');
+      link.href = imageLink;
+      link.download = `${productName.replace(/[^a-z0-9]/gi, '_')}.jpg`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+  }
+
+  function viewImageModal() {
+    const imageLink = document.getElementById('prefillImage').src;
+    if (imageLink) {
+      document.getElementById('modalImageLarge').src = imageLink;
+      document.getElementById('imageModal').classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    }
+  }
+
+  function closeImageModal() {
+    document.getElementById('imageModal').classList.add('hidden');
+    document.body.style.overflow = '';
+  }
+
+  function sendImageToWhatsApp() {
+    const productImage = document.getElementById('prefillImage').src || '';
+    const productName = document.getElementById('prefillName').textContent || '';
+    const message = document.getElementById('contactMessage').value || '';
+
+    function getPreviewUrl(imageUrl, title) {
+      if (!imageUrl) return '';
+      try {
+        const origin = window.location.origin || (location.protocol + '//' + location.host);
+        const q = 'src=' + encodeURIComponent(imageUrl) + (title ? '&title=' + encodeURIComponent(title) : '');
+        return origin + '/view_image.html?' + q;
+      } catch (e) {
+        return 'view_image.html?src=' + encodeURIComponent(imageUrl) + (title ? '&title=' + encodeURIComponent(title) : '');
+      }
+    }
+
+    // Open WhatsApp chat - user can manually attach image
+    let whatsappText = `*BURNIE SHOP - Demande de Produit* %0A%0A`;
+    
+    if (productName) {
+      whatsappText += `*Produit:* ${encodeURIComponent(productName)} %0A%0A`;
+    }
+
+    if (message) {
+      whatsappText += `*Message:* %0A${encodeURIComponent(message)} %0A%0A`;
+    }
+
+    if (productImage) {
+      const preview = getPreviewUrl(productImage, productName);
+      whatsappText += `*Image:* %0A${preview}`;
+    }
+
+    // Open WhatsApp app directly (mobile) or WhatsApp Web (desktop) - encode message in URL
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    if (isMobile) {
+      window.open(`https://wa.me/50932242766?text=${encodeURIComponent(whatsappText)}`, '_blank');
+    } else {
+      window.open(`https://web.whatsapp.com/send?phone=50932242766&text=${encodeURIComponent(whatsappText)}`, '_blank');
+    }
+  }
+
+  // Show/hide image button based on whether image is loaded
+  document.addEventListener('DOMContentLoaded', function() {
+    const savedLang = localStorage.getItem('preferredLanguage') || 'fr';
+    switchLanguage(savedLang);
+
+    // Monitor product preview visibility
+    const prefillProduct = document.getElementById('prefillProduct');
+    const sendImageBtn = document.getElementById('sendImageBtn');
+    const observer = new MutationObserver(function() {
+      if (prefillProduct.classList.contains('hidden')) {
+        sendImageBtn.style.display = 'none';
+      } else {
+        sendImageBtn.style.display = 'flex';
+      }
+    });
+    observer.observe(prefillProduct, { attributes: true, attributeFilter: ['class'] });
+  });
+
+  // Close modal on Escape key
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      closeImageModal();
+    }
+  });
+
   // Contact Form Handler
   document.getElementById('contactForm').addEventListener('submit', function(e) {
     e.preventDefault();
@@ -508,11 +692,11 @@
     const sujet = form.querySelector('select').value;
     const message = form.querySelector('textarea').value;
 
-    // Create WhatsApp message
-    const whatsappMessage = `Burnie Shop %0A%0ANom: ${nom}%0AEmail: ${email}%0ATéléphone: ${telephone}%0ASujet: ${sujet}%0A%0AMessage: ${message}`;
+    // Create WhatsApp message (plain text with newlines)
+    const whatsappMessage = `Burnie Shop\n\nNom: ${nom}\nEmail: ${email}\nTéléphone: ${telephone}\nSujet: ${sujet}\n\nMessage: ${message}`;
 
-    // Open WhatsApp
-    window.open(`https://wa.me/50932242766?text=${whatsappMessage}`, '_blank');
+    // Open WhatsApp (encode the full message)
+    window.open(`https://wa.me/50932242766?text=${encodeURIComponent(whatsappMessage)}`, '_blank');
 
     // Reset form
     form.reset();

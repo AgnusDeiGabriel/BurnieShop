@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Boutik - BURNIE-SHOP</title>
+    <title>Boutique - BURNIE-SHOP</title>
     <link rel="shortcut icon" href="./fille.jpeg" />
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -41,6 +41,26 @@
       class="flex justify-between items-center px-4 md:px-8 py-4 bg-white shadow-md sticky top-0 z-50"
     >
       <div class="flex items-center gap-4">
+        <!-- MOBILE MENU BUTTON -->
+        <button
+          onclick="toggleSidebar()"
+          class="md:hidden px-4 py-2 rounded-full font-semibold transition border-2 border-gold text-gold hover:bg-gold hover:text-black"
+        >
+          <svg
+            class="w-6 h-6 stroke-gold"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 6h16M4 12h16M4 18h16"
+            ></path>
+          </svg>
+        </button>
         <a href="index.html" class="text-xl md:text-2xl font-bold tracking-wide"
           >BURNIE<span class="text-gold">SHOP</span></a
         >
@@ -56,7 +76,7 @@
           href="boutik.html"
           class="font-semibold text-gold"
           data-lang="nav-boutik"
-          >Boutik</a
+          >Boutique</a
         >
         <a
           href="gallery.html"
@@ -90,13 +110,89 @@
       </div>
     </nav>
 
+    <!-- MOBILE SIDEBAR -->
+    <div
+      id="sidebarOverlay"
+      class="fixed inset-0 bg-black/50 z-40 hidden md:hidden"
+      onclick="closeSidebar()"
+    ></div>
+    <div
+      id="sidebar"
+      class="fixed left-0 top-0 h-full w-[85vw] max-w-80 bg-white shadow-lg z-50 transform -translate-x-full transition-transform duration-300 md:hidden"
+    >
+      <div class="p-6">
+        <button
+          onclick="closeSidebar()"
+          class="absolute top-4 right-4 text-2xl font-bold"
+        >
+          ×
+        </button>
+        <h2 class="text-xl font-bold mb-6 text-center">Menu</h2>
+        <div class="space-y-4">
+          <a
+            href="index.html"
+            class="block py-2 px-4 rounded hover:bg-gray-100 transition"
+            onclick="closeSidebar()"
+            data-lang="nav-home"
+            >Home</a
+          >
+          <a
+            href="boutik.html"
+            class="block py-2 px-4 rounded hover:bg-gray-100 transition"
+            onclick="closeSidebar()"
+            data-lang="nav-boutik"
+            >Boutique</a
+          >
+          <a
+            href="gallery.html"
+            class="block py-2 px-4 rounded hover:bg-gray-100 transition"
+            onclick="closeSidebar()"
+            data-lang="nav-gallery"
+            >Gallery</a
+          >
+          <a
+            href="contact.html"
+            class="block py-2 px-4 rounded hover:bg-gray-100 transition"
+            onclick="closeSidebar()"
+            data-lang="nav-contact"
+            >Contact</a
+          >
+        </div>
+        <div class="mt-8 pt-6 border-t border-gray-200">
+          <h3 class="text-lg font-semibold mb-4 text-center">Langue</h3>
+          <div class="flex justify-center gap-2 mb-6">
+            <button
+              onclick="
+                switchLanguage('fr');
+                closeSidebar();
+              "
+              class="px-4 py-2 text-sm font-semibold border-2 border-gold text-gold hover:bg-gold hover:text-black transition"
+              id="lang-fr-mobile"
+            >
+              FR
+            </button>
+            <button
+              onclick="
+                switchLanguage('en');
+                closeSidebar();
+              "
+              class="px-4 py-2 text-sm font-semibold border-2 border-gray-300 text-gray-600 hover:bg-gray-300 hover:text-black transition"
+              id="lang-en-mobile"
+            >
+              EN
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- HERO -->
     <section class="px-4 md:px-16 py-12 md:py-20 bg-white text-center">
       <h1 class="text-4xl md:text-5xl font-bold mb-4" data-lang="page-title">
-        Boutik
+        Boutique
       </h1>
       <p class="text-gray-600" data-lang="page-sub">
-        Chwazi kategori w: Sandales, Valises, Vetements, Other
+        Chwazi kategori w: Sandales, Valises, Vêtements, Other
       </p>
     </section>
 
@@ -127,7 +223,7 @@
               onclick="setFilter('vetements')"
               class="filter-btn px-4 py-2 rounded-full text-sm font-semibold border-2 border-gray-300 transition hover:border-black"
             >
-              Vetements
+              Vêtements
             </button>
             <button
               onclick="setFilter('others')"
@@ -224,6 +320,21 @@
     </section>
 
     <script>
+      // Sidebar toggle functions
+      function toggleSidebar() {
+        const sidebar = document.getElementById("sidebar");
+        const overlay = document.getElementById("sidebarOverlay");
+        sidebar.classList.toggle("-translate-x-full");
+        overlay.classList.toggle("hidden");
+      }
+
+      function closeSidebar() {
+        const sidebar = document.getElementById("sidebar");
+        const overlay = document.getElementById("sidebarOverlay");
+        sidebar.classList.add("-translate-x-full");
+        overlay.classList.add("hidden");
+      }
+
       // filenames from the Sandals/ folder
       const sandalFiles = [
         "0001_BALENCIAGA SANDAL.jpeg",
@@ -456,12 +567,12 @@
       // Translations (minimal for this page)
       const translations = {
         fr: {
-          "nav-home": "Home",
-          "nav-boutik": "Boutik",
-          "nav-gallery": "Gallery",
+          "nav-home": "Accueil",
+          "nav-boutik": "Boutique",
+          "nav-gallery": "Galerie",
           "nav-contact": "Contact",
-          "page-title": "Boutik",
-          "page-sub": "Chwazi kategori w: Sandales, Valises, Vetements, Other",
+          "page-title": "Boutique",
+          "page-sub": "Chwazi kategori w: Sandales, Valises, Vêtements, Other",
           "product-count": "Produits",
           "empty-msg": "Pa gen pwodwi pou kategori sa a.",
           "contact-btn": "Contactez-nous",
@@ -485,6 +596,9 @@
         // Update button styles if buttons exist
         const frBtn = document.getElementById("lang-fr");
         const enBtn = document.getElementById("lang-en");
+        const frBtnMobile = document.getElementById("lang-fr-mobile");
+        const enBtnMobile = document.getElementById("lang-en-mobile");
+        
         if (frBtn && enBtn) {
           if (lang === "fr") {
             frBtn.classList.add("border-gold", "text-gold");
@@ -496,6 +610,20 @@
             enBtn.classList.remove("border-gray-300", "text-gray-600");
             frBtn.classList.add("border-gray-300", "text-gray-600");
             frBtn.classList.remove("border-gold", "text-gold");
+          }
+        }
+        
+        if (frBtnMobile && enBtnMobile) {
+          if (lang === "fr") {
+            frBtnMobile.classList.add("border-gold", "text-gold");
+            frBtnMobile.classList.remove("border-gray-300", "text-gray-600");
+            enBtnMobile.classList.add("border-gray-300", "text-gray-600");
+            enBtnMobile.classList.remove("border-gold", "text-gold");
+          } else {
+            enBtnMobile.classList.add("border-gold", "text-gold");
+            enBtnMobile.classList.remove("border-gray-300", "text-gray-600");
+            frBtnMobile.classList.add("border-gray-300", "text-gray-600");
+            frBtnMobile.classList.remove("border-gold", "text-gold");
           }
         }
 
@@ -536,14 +664,40 @@
         title.textContent = displayName;
         desc.textContent = `Produit: ${displayName}`;
 
-        const href = `contact.html?product=${encodeURIComponent(
-          displayName,
-        )}&image=${encodeURIComponent(folder + "/" + filename)}`;
-        contactBtn.href = href;
-
+        const imageUrl = folder + "/" + filename;
+        contactBtn.href = "#";
+        contactBtn.onclick = function(e) {
+          e.preventDefault();
+          sendProductToWhatsApp(displayName, imageUrl);
+        };
 
         modal.classList.remove("hidden");
         modal.classList.add("flex");
+      }
+
+      function getPreviewUrl(imageUrl, title) {
+        if (!imageUrl) return '';
+        try {
+          const origin = window.location.origin || (location.protocol + '//' + location.host);
+          const q = 'src=' + encodeURIComponent(imageUrl) + (title ? '&title=' + encodeURIComponent(title) : '');
+          return origin + '/view_image.html?' + q;
+        } catch (e) {
+          return 'view_image.html?src=' + encodeURIComponent(imageUrl) + (title ? '&title=' + encodeURIComponent(title) : '');
+        }
+      }
+
+      function sendProductToWhatsApp(productName, imageUrl) {
+        let whatsappText = `*BURNIE SHOP - Demande de Produit* %0A%0A`;
+        whatsappText += `*Produit:* ${encodeURIComponent(productName)} %0A%0A`;
+        const preview = getPreviewUrl(imageUrl, productName);
+        whatsappText += `*Image:* %0A${preview}`;
+
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        if (isMobile) {
+          window.open(`https://wa.me/50932242766?text=${encodeURIComponent(whatsappText)}`, '_blank');
+        } else {
+          window.open(`https://web.whatsapp.com/send?phone=50932242766&text=${encodeURIComponent(whatsappText)}`, '_blank');
+        }
       }
 
       function closeModal() {

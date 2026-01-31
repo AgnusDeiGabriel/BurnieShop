@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>BURNIE-SHOP - Galerie de Cheveux Premium</title>
+    <title>Boutique - Galerie de Cheveux Premium</title>
     <link rel="shortcut icon" href="./fille.jpeg" />
 
     <!-- Tailwind CDN -->
@@ -50,20 +50,20 @@
           </svg>
         </button>
         <h1 class="text-xl md:text-2xl font-bold tracking-wide">
-          BURNIE<span class="text-gold">SHOP</span>
+          Burnie Shop
         </h1>
       </div>
       <div class="hidden md:flex gap-8 items-center">
-        <a href="index.html" class="font-semibold hover:text-gold transition"
+        <a href="index.html" class="font-semibold hover:text-gold transition" data-lang="nav-home"
           >Accueil</a
         >
-        <a href="boutik.html" class="font-semibold hover:text-gold transition"
-          >Boutik</a
+        <a href="boutik.html" class="font-semibold hover:text-gold transition" data-lang="nav-boutik"
+          >Boutique</a
         >
-        <a href="gallery.html" class="font-semibold hover:text-gold transition"
+        <a href="gallery.html" class="font-semibold hover:text-gold transition" data-lang="nav-gallery"
           >Galerie</a
         >
-        <a href="contact.html" class="font-semibold hover:text-gold transition"
+        <a href="contact.html" class="font-semibold hover:text-gold transition" data-lang="nav-contact"
           >Contact</a
         >
         <div class="flex gap-2 ml-4">
@@ -108,23 +108,33 @@
             href="index.html"
             class="block py-2 px-4 rounded hover:bg-gray-100 transition"
             onclick="closeSidebar()"
+            data-lang="nav-home"
             >Accueil</a
+          >
+          <a
+            href="boutik.html"
+            class="block py-2 px-4 rounded hover:bg-gray-100 transition"
+            onclick="closeSidebar()"
+            data-lang="nav-boutik"
+            >Boutique</a
           >
           <a
             href="gallery.html"
             class="block py-2 px-4 rounded hover:bg-gray-100 transition"
             onclick="closeSidebar()"
+            data-lang="nav-gallery"
             >Galerie</a
           >
           <a
             href="contact.html"
             class="block py-2 px-4 rounded hover:bg-gray-100 transition"
             onclick="closeSidebar()"
+            data-lang="nav-contact"
             >Contact</a
           >
         </div>
         <div class="mt-8 pt-6 border-t border-gray-200">
-          <h3 class="text-lg font-semibold mb-4 text-center">Langue</h3>
+          <h3 class="text-lg font-semibold mb-4 text-center" data-lang="sidebar-lang">Langue</h3>
           <div class="flex justify-center gap-2 mb-6">
             <button
               onclick="
@@ -460,7 +470,7 @@
     <!-- FOOTER -->
     <footer class="bg-gray-900 text-white text-center py-6 md:py-8 px-4">
       <p class="mb-4 text-sm md:text-base">
-        &copy; 2026 BURNIE-SHOP — Designed By
+        &copy; 2026 Boutique — Designed By
         <a href="https://xiodix.com" target="_blank" class="hover:text-gold"
           >XIODIX</a
         >
@@ -510,6 +520,11 @@
       // Translations object
       const translations = {
         fr: {
+          "nav-home": "Accueil",
+          "nav-boutik": "Boutique",
+          "nav-gallery": "Galerie",
+          "nav-contact": "Contact",
+          "sidebar-lang": "Langue",
           "hero-title": "Cheveux 100% Humains",
           "hero-subtitle":
             "Galerie exclusive • Qualité supérieure • Livraison rapide",
@@ -538,6 +553,11 @@
           "cta-btn": "Consulter la Galerie",
         },
         en: {
+          "nav-home": "Home",
+          "nav-boutik": "Boutique",
+          "nav-gallery": "Gallery",
+          "nav-contact": "Contact",
+          "sidebar-lang": "Language",
           "hero-title": "100% Human Hair",
           "hero-subtitle":
             "Exclusive Gallery • Superior Quality • Fast Delivery",
