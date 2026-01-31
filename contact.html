@@ -11,6 +11,38 @@
 
   <!-- Tailwind config -->
   <script>
+
+  <script>
+    // Prefill contact form from query params (product, image)
+    document.addEventListener('DOMContentLoaded', () => {
+      try {
+        const params = new URLSearchParams(window.location.search);
+        if (params.has('product')) {
+          const product = params.get('product');
+          const image = params.get('image') || '';
+
+          const preview = document.getElementById('prefillProduct');
+          const img = document.getElementById('prefillImage');
+          const name = document.getElementById('prefillName');
+          const note = document.getElementById('prefillNote');
+
+          if (img && image) img.src = image;
+          if (name) name.textContent = product;
+          if (note) note.textContent = 'Produit sélectionné pour contact';
+          if (preview) preview.classList.remove('hidden');
+
+          // Prefill subject and message
+          const subject = document.getElementById('contactSubject');
+          const message = document.getElementById('contactMessage');
+          if (subject) subject.value = 'question';
+          if (message) message.value = `Bonjour, je suis intéressé par: ${product}\n\nImage: ${image}`;
+        }
+      } catch (e) {
+        // ignore
+        console.error(e);
+      }
+    });
+  </script>
     tailwind.config = {
       theme: {
         extend: {
@@ -137,31 +169,58 @@
         </a>
       </div>
 
+      <!-- Purchase Lan Pito (quick) -->
+      <div class="bg-white p-5 md:p-8 rounded-xl shadow-lg hover:shadow-xl transition mb-4 md:mb-6">
+        <div class="flex items-center mb-4">
+          <div class="text-3xl md:text-4xl mr-3 md:mr-4">🛒</div>
+          <div>
+            <h3 class="text-xl md:text-2xl font-bold">Acheter — Lan Pito</h3>
+            <p class="text-gray-600 text-sm md:text-base">Intéressé? Contactez-nous directement pour acheter "Lan Pito".</p>
+          </div>
+        </div>
+        <p class="text-gray-700 mb-4 text-sm md:text-base">Cliquez ci-dessous pour démarrer une conversation WhatsApp pré-remplie pour l'achat.</p>
+        <a href="https://wa.me/50932242766?text=Bonjour%2C%20mwen%20vle%20achte%20Lan%20Pito%20-%20tanpri%20bay%20m%20plis%20enfòmasyon" target="_blank" class="inline-block bg-black text-white px-4 md:px-6 py-2 md:py-3 rounded-lg font-bold hover:bg-gold hover:text-black transition text-sm md:text-base">
+          🛒 Achte Lan Pito
+        </a>
+      </div>
+
     </div>
 
     <!-- RIGHT SIDE - CONTACT FORM -->
     <div>
       <h2 class="text-2xl md:text-3xl font-bold mb-6 md:mb-8" data-lang="contact-form-title">Formulaire de Contact</h2>
+
+      <!-- Product preview (prefilled when coming from product link) -->
+      <div id="prefillProduct" class="bg-white p-5 md:p-8 rounded-xl shadow-lg mb-6 hidden">
+        <div class="flex gap-4 items-center">
+          <img id="prefillImage" src="" alt="" class="w-32 h-32 object-cover rounded" />
+          <div>
+            <p id="prefillName" class="font-bold"></p>
+            <p id="prefillNote" class="text-sm text-gray-600">Produit sélectionné</p>
+          </div>
+        </div>
+      </div>
+
       <form id="contactForm" class="bg-white p-5 md:p-8 rounded-xl shadow-lg">
 
         <div class="mb-6">
           <label class="block text-sm font-bold mb-2" data-lang="contact-form-name">Votre Nom</label>
-          <input type="text" required placeholder="Ex: Marie Dupont" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-gold">
+          <input id="contactName" type="text" required placeholder="Ex: Marie Dupont" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-gold">
         </div>
 
         <div class="mb-6">
           <label class="block text-sm font-bold mb-2" data-lang="contact-form-email">Email</label>
-          <input type="email" required placeholder="votre@email.com" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-gold">
+          <input id="contactEmail" type="email" required placeholder="votre@email.com" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-gold">
         </div>
 
         <div class="mb-6">
           <label class="block text-sm font-bold mb-2" data-lang="contact-form-phone">Téléphone (WhatsApp)</label>
-          <input type="tel" required placeholder="+509xxxxxxx" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-gold">
+          <input id="contactPhone" type="tel" required placeholder="+509xxxxxxx" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-gold">
         </div>
 
         <div class="mb-6">
           <label class="block text-sm font-bold mb-2" data-lang="contact-form-subject">Sujet</label>
-          <select required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-gold">
+          <select id="contactSubject" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-gold">
             <option value="" data-lang="contact-form-select-subject">Sélectionnez un sujet</option>
             <option value="question" data-lang="contact-form-option-question">Question sur les produits</option>
             <option value="commande" data-lang="contact-form-option-order">Passer une commande</option>
@@ -171,7 +230,7 @@
 
         <div class="mb-6">
           <label class="block text-sm font-bold mb-2" data-lang="contact-form-message">Message</label>
-          <textarea required placeholder="Décrivez votre message ici..." rows="5" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-gold"></textarea>
+          <textarea id="contactMessage" required placeholder="Décrivez votre message ici..." rows="5" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-gold"></textarea>
         </div>
 
         <button type="submit" class="w-full bg-black text-white py-3 rounded-lg font-bold hover:bg-gold hover:text-black transition" data-lang="contact-form-submit">

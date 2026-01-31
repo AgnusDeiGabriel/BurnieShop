@@ -1,345 +1,635 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fr">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BURNIE-SHOP - Galerie de Cheveux Premium</title>
-  <link rel="shortcut icon" href="./fille.jpeg">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BURNIE-SHOP - Galerie de Cheveux Premium</title>
+    <link rel="shortcut icon" href="./fille.jpeg" />
 
-  <!-- Tailwind CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Tailwind CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Tailwind config -->
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            primary: '#000000',
-            gold: '#d4af37'
-          }
+    <!-- Tailwind config -->
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: "#000000",
+              gold: "#d4af37",
+            },
+          },
+        },
+      };
+    </script>
+  </head>
+  <body class="bg-gray-50 text-gray-900">
+    <!-- NAVBAR -->
+    <nav
+      class="flex justify-between items-center px-4 md:px-8 py-4 bg-white shadow-md sticky top-0 z-50"
+    >
+      <div class="flex items-center gap-4">
+        <!-- MOBILE MENU BUTTON -->
+        <button
+          onclick="toggleSidebar()"
+          class="md:hidden px-4 py-2 rounded-full font-semibold transition border-2 border-gold text-gold hover:bg-gold hover:text-black"
+        >
+          <svg
+            class="w-6 h-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 6h16M4 12h16M4 18h16"
+            ></path>
+          </svg>
+        </button>
+        <h1 class="text-xl md:text-2xl font-bold tracking-wide">
+          BURNIE<span class="text-gold">SHOP</span>
+        </h1>
+      </div>
+      <div class="hidden md:flex gap-8 items-center">
+        <a href="index.html" class="font-semibold hover:text-gold transition"
+          >Accueil</a
+        >
+        <a href="boutik.html" class="font-semibold hover:text-gold transition"
+          >Boutik</a
+        >
+        <a href="gallery.html" class="font-semibold hover:text-gold transition"
+          >Galerie</a
+        >
+        <a href="contact.html" class="font-semibold hover:text-gold transition"
+          >Contact</a
+        >
+        <div class="flex gap-2 ml-4">
+          <button
+            onclick="switchLanguage('fr')"
+            class="px-3 py-1 text-sm font-semibold border-2 border-gold text-gold hover:bg-gold hover:text-black transition"
+            id="lang-fr"
+          >
+            FR
+          </button>
+          <button
+            onclick="switchLanguage('en')"
+            class="px-3 py-1 text-sm font-semibold border-2 border-gray-300 text-gray-600 hover:bg-gray-300 hover:text-black transition"
+            id="lang-en"
+          >
+            EN
+          </button>
+        </div>
+      </div>
+    </nav>
+
+    <!-- MOBILE SIDEBAR -->
+    <div
+      id="sidebarOverlay"
+      class="fixed inset-0 bg-black/50 z-40 hidden md:hidden"
+      onclick="closeSidebar()"
+    ></div>
+    <div
+      id="sidebar"
+      class="fixed left-0 top-0 h-full w-[85vw] max-w-80 bg-white shadow-lg z-50 transform -translate-x-full transition-transform duration-300 md:hidden"
+    >
+      <div class="p-6">
+        <button
+          onclick="closeSidebar()"
+          class="absolute top-4 right-4 text-2xl font-bold"
+        >
+          ×
+        </button>
+        <h2 class="text-xl font-bold mb-6 text-center">Menu</h2>
+        <div class="space-y-4">
+          <a
+            href="index.html"
+            class="block py-2 px-4 rounded hover:bg-gray-100 transition"
+            onclick="closeSidebar()"
+            >Accueil</a
+          >
+          <a
+            href="gallery.html"
+            class="block py-2 px-4 rounded hover:bg-gray-100 transition"
+            onclick="closeSidebar()"
+            >Galerie</a
+          >
+          <a
+            href="contact.html"
+            class="block py-2 px-4 rounded hover:bg-gray-100 transition"
+            onclick="closeSidebar()"
+            >Contact</a
+          >
+        </div>
+        <div class="mt-8 pt-6 border-t border-gray-200">
+          <h3 class="text-lg font-semibold mb-4 text-center">Langue</h3>
+          <div class="flex justify-center gap-2 mb-6">
+            <button
+              onclick="
+                switchLanguage('fr');
+                closeSidebar();
+              "
+              class="px-4 py-2 text-sm font-semibold border-2 border-gold text-gold hover:bg-gold hover:text-black transition"
+              id="lang-fr-mobile"
+            >
+              FR
+            </button>
+            <button
+              onclick="
+                switchLanguage('en');
+                closeSidebar();
+              "
+              class="px-4 py-2 text-sm font-semibold border-2 border-gray-300 text-gray-600 hover:bg-gray-300 hover:text-black transition"
+              id="lang-en-mobile"
+            >
+              EN
+            </button>
+          </div>
+          <h3 class="text-lg font-semibold mb-4 text-center">Suivez-nous</h3>
+          <div class="flex justify-center gap-5">
+            <a
+              href="https://www.facebook.com/share/1AkCdm1ixj/"
+              target="_blank"
+              class="text-gray-600 hover:text-gold transition"
+              aria-label="Facebook"
+            >
+              <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                <path
+                  d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"
+                />
+              </svg>
+            </a>
+            <a
+              href="https://www.instagram.com/burnie_shop?igsh=bDZzcTkwaGMwZndi"
+              target="_blank"
+              class="text-gray-600 hover:text-gold transition"
+              aria-label="Instagram"
+            >
+              <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                <path
+                  d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"
+                />
+              </svg>
+            </a>
+            <a
+              href="https://www.tiktok.com/@burnie_shop?_r=1&_t=ZM-931avdVUjSl"
+              target="_blank"
+              class="text-gray-600 hover:text-gold transition"
+              aria-label="TikTok"
+            >
+              <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                <path
+                  d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"
+                />
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- HERO SECTION -->
+    <section
+      class="h-[90vh] flex items-center justify-center bg-cover bg-center relative"
+      style="background-image: url(&quot;./kenoleedesign.jpeg&quot;)"
+    >
+      <div class="absolute inset-0 bg-black/50"></div>
+      <div class="relative z-10 text-center text-white px-4 md:px-6">
+        <h2
+          class="text-3xl sm:text-5xl md:text-7xl font-bold mb-4 md:mb-6"
+          data-lang="hero-title"
+        >
+          Cheveux 100% Humains
+        </h2>
+        <p
+          class="text-base sm:text-xl md:text-2xl mb-6 md:mb-8"
+          data-lang="hero-subtitle"
+        >
+          Galerie exclusive • Qualité supérieure • Livraison rapide
+        </p>
+        <div class="flex gap-3 md:gap-4 justify-center flex-wrap">
+          <a
+            href="gallery.html"
+            class="bg-gold text-black px-5 sm:px-8 py-3 sm:py-4 rounded-full font-bold hover:scale-105 transition text-sm sm:text-lg"
+            data-lang="hero-gallery-btn"
+          >
+            Découvrir la Galerie
+          </a>
+          <a
+            href="contact.html"
+            class="bg-black border-2 border-gold text-gold px-5 sm:px-8 py-3 sm:py-4 rounded-full font-bold hover:bg-gold hover:text-black transition text-sm sm:text-lg"
+            data-lang="hero-contact-btn"
+          >
+            Nous Contacter
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section class="px-4 md:px-16 py-12 md:py-20 bg-white">
+      <h3
+        class="text-2xl md:text-4xl font-bold text-center mb-10 md:mb-16"
+        data-lang="features-title"
+      >
+        Pourquoi Choisir Burnie Shop?
+      </h3>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
+        <div class="text-center">
+          <div class="text-4xl md:text-5xl mb-4"></div>
+          <h4
+            class="text-xl md:text-2xl font-bold mb-3"
+            data-lang="feature1-title"
+          >
+            100% Cheveux Humains
+          </h4>
+          <p
+            class="text-gray-600 text-sm md:text-base"
+            data-lang="feature1-desc"
+          >
+            Cheveux naturels de haute qualité, non traités chimiquement
+          </p>
+        </div>
+
+        <div class="text-center">
+          <div class="text-4xl md:text-5xl mb-4"></div>
+          <h4
+            class="text-xl md:text-2xl font-bold mb-3"
+            data-lang="feature2-title"
+          >
+            Livraison Rapide
+          </h4>
+          <p
+            class="text-gray-600 text-sm md:text-base"
+            data-lang="feature2-desc"
+          >
+            Livraison express disponible dans tout le pays
+          </p>
+        </div>
+
+        <div class="text-center">
+          <div class="text-4xl md:text-5xl mb-4"></div>
+          <h4
+            class="text-xl md:text-2xl font-bold mb-3"
+            data-lang="feature3-title"
+          >
+            Garantie Qualité
+          </h4>
+          <p
+            class="text-gray-600 text-sm md:text-base"
+            data-lang="feature3-desc"
+          >
+            Satisfaction garantie ou remboursement complet
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- LATEST COLLECTION -->
+    <section class="px-4 md:px-16 py-12 md:py-20 bg-gray-100">
+      <h3 class="text-2xl md:text-4xl font-bold text-center mb-10 md:mb-16">
+        Dernière Collecte
+      </h3>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
+        <div
+          class="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition group"
+        >
+          <div class="relative overflow-hidden h-40 sm:h-60 md:h-80">
+            <img
+              src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=400"
+              class="w-full h-full object-cover group-hover:scale-110 transition duration-300"
+              alt="Cheveux Brésiliens Raides"
+            />
+          </div>
+          <div class="p-3 sm:p-6">
+            <h4 class="font-bold text-sm sm:text-lg mb-2">
+              Cheveux Brésiliens Raides
+            </h4>
+          </div>
+        </div>
+
+        <div
+          class="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition group"
+        >
+          <div class="relative overflow-hidden h-40 sm:h-60 md:h-80">
+            <img
+              src="./kenoleedesign.jpeg"
+              class="w-full h-full object-cover group-hover:scale-110 transition duration-300"
+              alt="Ondes Corporelles"
+            />
+          </div>
+          <div class="p-3 sm:p-6">
+            <h4 class="font-bold text-sm sm:text-lg mb-2">Ondes Corporelles</h4>
+          </div>
+        </div>
+
+        <div
+          class="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition group"
+        >
+          <div class="relative overflow-hidden h-40 sm:h-60 md:h-80">
+            <img
+              src="https://images.unsplash.com/photo-1519699047748-de8e457a634e?w=400"
+              class="w-full h-full object-cover group-hover:scale-110 transition duration-300"
+              alt="Boucles Naturelles"
+            />
+          </div>
+          <div class="p-3 sm:p-6">
+            <h4 class="font-bold text-sm sm:text-lg mb-2">
+              Boucles Naturelles
+            </h4>
+          </div>
+        </div>
+
+        <div
+          class="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition group"
+        >
+          <div class="relative overflow-hidden h-40 sm:h-60 md:h-80">
+            <img
+              src="./peruque_lace_front.jpg"
+              class="w-full h-full object-cover group-hover:scale-110 transition duration-300"
+              alt="Perruque Lace Front"
+            />
+          </div>
+          <div class="p-3 sm:p-6">
+            <h4 class="font-bold text-sm sm:text-lg mb-2">
+              Perruque Lace Front
+            </h4>
+            <p class="text-gray-600 text-xs sm:text-base mb-2 sm:mb-4"></p>
+          </div>
+        </div>
+      </div>
+      <div class="text-center mt-8 md:mt-12">
+        <a
+          href="gallery.html"
+          class="bg-gold text-black px-6 sm:px-8 py-3 rounded-full font-bold hover:scale-105 transition inline-block text-sm sm:text-base"
+        >
+          Voir Tous les Produits →
+        </a>
+      </div>
+    </section>
+
+    <!-- TESTIMONIALS -->
+    <section class="px-4 md:px-16 py-12 md:py-20 bg-white">
+      <h3
+        class="text-2xl md:text-4xl font-bold text-center mb-10 md:mb-16"
+        data-lang="testimonials-title"
+      >
+        Avis de Nos Clients
+      </h3>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+        <div class="bg-gray-100 p-5 md:p-8 rounded-lg">
+          <div class="text-gold text-xl md:text-2xl mb-3">★★★★★</div>
+          <p
+            class="text-gray-700 mb-4 text-sm md:text-base"
+            data-lang="testimonial1-text"
+          >
+            "Les cheveux sont incroyables! Excellente qualité et livraison
+            rapide. Je recommande vivement HairLux!"
+          </p>
+          <p
+            class="font-bold text-sm md:text-base"
+            data-lang="testimonial1-author"
+          >
+            - Marie D.
+          </p>
+        </div>
+
+        <div class="bg-gray-100 p-5 md:p-8 rounded-lg">
+          <div class="text-gold text-xl md:text-2xl mb-3">★★★★★</div>
+          <p
+            class="text-gray-700 mb-4 text-sm md:text-base"
+            data-lang="testimonial2-text"
+          >
+            "Meilleur achat que j'ai jamais fait. Les cheveux durent longtemps
+            et ont l'air naturels. Merci!"
+          </p>
+          <p
+            class="font-bold text-sm md:text-base"
+            data-lang="testimonial2-author"
+          >
+            - Sophie L.
+          </p>
+        </div>
+
+        <div class="bg-gray-100 p-5 md:p-8 rounded-lg">
+          <div class="text-gold text-xl md:text-2xl mb-3">★★★★★</div>
+          <p
+            class="text-gray-700 mb-4 text-sm md:text-base"
+            data-lang="testimonial3-text"
+          >
+            "Service client extraordinaire et produits de qualité supérieure.
+            Très satisfaite de mon achat!"
+          </p>
+          <p
+            class="font-bold text-sm md:text-base"
+            data-lang="testimonial3-author"
+          >
+            - Jessica M.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section
+      class="bg-black text-white px-4 md:px-16 py-12 md:py-20 text-center"
+    >
+      <h3
+        class="text-2xl md:text-4xl font-bold mb-4 md:mb-6"
+        data-lang="cta-title"
+      >
+        Prêt(e) à Transformer Vos Cheveux?
+      </h3>
+      <p
+        class="text-base md:text-xl mb-6 md:mb-8 text-gray-300"
+        data-lang="cta-subtitle"
+      >
+        Explorez notre collection exclusive dès maintenant
+      </p>
+      <a
+        href="gallery.html"
+        class="bg-gold text-black px-6 sm:px-8 py-3 sm:py-4 rounded-full font-bold hover:scale-105 transition inline-block text-sm sm:text-lg"
+        data-lang="cta-btn"
+      >
+        Consulter la Galerie
+      </a>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-gray-900 text-white text-center py-6 md:py-8 px-4">
+      <p class="mb-4 text-sm md:text-base">
+        &copy; 2026 BURNIE-SHOP — Designed By
+        <a href="https://xiodix.com" target="_blank" class="hover:text-gold"
+          >XIODIX</a
+        >
+      </p>
+      <div class="flex justify-center gap-5 md:gap-6">
+        <a
+          href="https://www.facebook.com/share/1AkCdm1ixj/"
+          target="_blank"
+          class="hover:text-gold transition"
+          aria-label="Facebook"
+        >
+          <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+            <path
+              d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"
+            />
+          </svg>
+        </a>
+        <a
+          href="https://www.instagram.com/burnie_shop?igsh=bDZzcTkwaGMwZndi"
+          target="_blank"
+          class="hover:text-gold transition"
+          aria-label="Instagram"
+        >
+          <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+            <path
+              d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"
+            />
+          </svg>
+        </a>
+        <a
+          href="https://www.tiktok.com/@burnie_shop?_r=1&_t=ZM-931avdVUjSl"
+          target="_blank"
+          class="hover:text-gold transition"
+          aria-label="TikTok"
+        >
+          <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+            <path
+              d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"
+            />
+          </svg>
+        </a>
+      </div>
+    </footer>
+
+    <!-- JAVASCRIPT -->
+    <script>
+      // Translations object
+      const translations = {
+        fr: {
+          "hero-title": "Cheveux 100% Humains",
+          "hero-subtitle":
+            "Galerie exclusive • Qualité supérieure • Livraison rapide",
+          "hero-gallery-btn": "Découvrir la Galerie",
+          "hero-contact-btn": "Nous Contacter",
+          "features-title": "Pourquoi Choisir Burnie Shop?",
+          "feature1-title": "100% Cheveux Humains",
+          "feature1-desc":
+            "Cheveux naturels de haute qualité, non traités chimiquement",
+          "feature2-title": "Livraison Rapide",
+          "feature2-desc": "Livraison express disponible dans tout le pays",
+          "feature3-title": "Garantie Qualité",
+          "feature3-desc": "Satisfaction garantie ou remboursement complet",
+          "testimonials-title": "Avis de Nos Clients",
+          "testimonial1-text":
+            '"Les cheveux sont incroyables! Excellente qualité et livraison rapide. Je recommande vivement HairLux!"',
+          "testimonial1-author": "- Marie D.",
+          "testimonial2-text":
+            "\"Meilleur achat que j'ai jamais fait. Les cheveux durent longtemps et ont l'air naturels. Merci!\"",
+          "testimonial2-author": "- Sophie L.",
+          "testimonial3-text":
+            '"Service client extraordinaire et produits de qualité supérieure. Très satisfaite de mon achat!"',
+          "testimonial3-author": "- Jessica M.",
+          "cta-title": "Prêt(e) à Transformer Vos Cheveux?",
+          "cta-subtitle": "Explorez notre collection exclusive dès maintenant",
+          "cta-btn": "Consulter la Galerie",
+        },
+        en: {
+          "hero-title": "100% Human Hair",
+          "hero-subtitle":
+            "Exclusive Gallery • Superior Quality • Fast Delivery",
+          "hero-gallery-btn": "Discover the Gallery",
+          "hero-contact-btn": "Contact Us",
+          "features-title": "Why Choose Burnie Shop?",
+          "feature1-title": "100% Human Hair",
+          "feature1-desc": "High-quality natural hair, chemically untreated",
+          "feature2-title": "Fast Delivery",
+          "feature2-desc": "Express delivery available nationwide",
+          "feature3-title": "Quality Guarantee",
+          "feature3-desc": "Satisfaction guaranteed or full refund",
+          "testimonials-title": "Customer Reviews",
+          "testimonial1-text":
+            '"The hair is amazing! Excellent quality and fast delivery. I highly recommend HairLux!"',
+          "testimonial1-author": "- Marie D.",
+          "testimonial2-text":
+            '"Best purchase I\'ve ever made. The hair lasts long and looks natural. Thank you!"',
+          "testimonial2-author": "- Sophie L.",
+          "testimonial3-text":
+            '"Extraordinary customer service and superior quality products. Very satisfied with my purchase!"',
+          "testimonial3-author": "- Jessica M.",
+          "cta-title": "Ready to Transform Your Hair?",
+          "cta-subtitle": "Explore our exclusive collection now",
+          "cta-btn": "View Gallery",
+        },
+      };
+
+      function toggleSidebar() {
+        const sidebar = document.getElementById("sidebar");
+        const overlay = document.getElementById("sidebarOverlay");
+        sidebar.classList.toggle("-translate-x-full");
+        overlay.classList.toggle("hidden");
+      }
+
+      function closeSidebar() {
+        const sidebar = document.getElementById("sidebar");
+        const overlay = document.getElementById("sidebarOverlay");
+        sidebar.classList.add("-translate-x-full");
+        overlay.classList.add("hidden");
+      }
+
+      function switchLanguage(lang) {
+        // Update button styles
+        const frBtn = document.getElementById("lang-fr");
+        const enBtn = document.getElementById("lang-en");
+        const frBtnMobile = document.getElementById("lang-fr-mobile");
+        const enBtnMobile = document.getElementById("lang-en-mobile");
+
+        if (lang === "fr") {
+          frBtn.classList.add("border-gold", "text-gold");
+          frBtn.classList.remove("border-gray-300", "text-gray-600");
+          enBtn.classList.add("border-gray-300", "text-gray-600");
+          enBtn.classList.remove("border-gold", "text-gold");
+
+          frBtnMobile.classList.add("border-gold", "text-gold");
+          frBtnMobile.classList.remove("border-gray-300", "text-gray-600");
+          enBtnMobile.classList.add("border-gray-300", "text-gray-600");
+          enBtnMobile.classList.remove("border-gold", "text-gold");
+        } else {
+          enBtn.classList.add("border-gold", "text-gold");
+          enBtn.classList.remove("border-gray-300", "text-gray-600");
+          frBtn.classList.add("border-gray-300", "text-gray-600");
+          frBtn.classList.remove("border-gold", "text-gold");
+
+          enBtnMobile.classList.add("border-gold", "text-gold");
+          enBtnMobile.classList.remove("border-gray-300", "text-gray-600");
+          frBtnMobile.classList.add("border-gray-300", "text-gray-600");
+          frBtnMobile.classList.remove("border-gold", "text-gold");
         }
+
+        // Update text content
+        const elements = document.querySelectorAll("[data-lang]");
+        elements.forEach((element) => {
+          const key = element.getAttribute("data-lang");
+          if (translations[lang][key]) {
+            element.textContent = translations[lang][key];
+          }
+        });
+
+        // Update document language
+        document.documentElement.lang = lang;
+
+        // Store language preference
+        localStorage.setItem("preferredLanguage", lang);
       }
-    }
-  </script>
-</head>
-<body class="bg-gray-50 text-gray-900">
 
-<!-- NAVBAR -->
-<nav class="flex justify-between items-center px-4 md:px-8 py-4 bg-white shadow-md sticky top-0 z-50">
-  <div class="flex items-center gap-4">
-    <!-- MOBILE MENU BUTTON -->
-    <button onclick="toggleSidebar()" class="md:hidden px-4 py-2 rounded-full font-semibold transition border-2 border-gold text-gold hover:bg-gold hover:text-black">
-      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
-    </button>
-    <h1 class="text-xl md:text-2xl font-bold tracking-wide">BURNIE<span class="text-gold">SHOP</span></h1>
-  </div>
-  <div class="hidden md:flex gap-8 items-center">
-    <a href="index.html" class="font-semibold hover:text-gold transition">Accueil</a>
-    <a href="gallery.html" class="font-semibold hover:text-gold transition">Galerie</a>
-    <a href="contact.html" class="font-semibold hover:text-gold transition">Contact</a>
-    <div class="flex gap-2 ml-4">
-      <button onclick="switchLanguage('fr')" class="px-3 py-1 text-sm font-semibold border-2 border-gold text-gold hover:bg-gold hover:text-black transition" id="lang-fr">FR</button>
-      <button onclick="switchLanguage('en')" class="px-3 py-1 text-sm font-semibold border-2 border-gray-300 text-gray-600 hover:bg-gray-300 hover:text-black transition" id="lang-en">EN</button>
-    </div>
-  </div>
-</nav>
-
-<!-- MOBILE SIDEBAR -->
-<div id="sidebarOverlay" class="fixed inset-0 bg-black/50 z-40 hidden md:hidden" onclick="closeSidebar()"></div>
-<div id="sidebar" class="fixed left-0 top-0 h-full w-[85vw] max-w-80 bg-white shadow-lg z-50 transform -translate-x-full transition-transform duration-300 md:hidden">
-  <div class="p-6">
-    <button onclick="closeSidebar()" class="absolute top-4 right-4 text-2xl font-bold">×</button>
-    <h2 class="text-xl font-bold mb-6 text-center">Menu</h2>
-    <div class="space-y-4">
-      <a href="index.html" class="block py-2 px-4 rounded hover:bg-gray-100 transition" onclick="closeSidebar()">Accueil</a>
-      <a href="gallery.html" class="block py-2 px-4 rounded hover:bg-gray-100 transition" onclick="closeSidebar()">Galerie</a>
-      <a href="contact.html" class="block py-2 px-4 rounded hover:bg-gray-100 transition" onclick="closeSidebar()">Contact</a>
-    </div>
-    <div class="mt-8 pt-6 border-t border-gray-200">
-      <h3 class="text-lg font-semibold mb-4 text-center">Langue</h3>
-      <div class="flex justify-center gap-2 mb-6">
-        <button onclick="switchLanguage('fr'); closeSidebar()" class="px-4 py-2 text-sm font-semibold border-2 border-gold text-gold hover:bg-gold hover:text-black transition" id="lang-fr-mobile">FR</button>
-        <button onclick="switchLanguage('en'); closeSidebar()" class="px-4 py-2 text-sm font-semibold border-2 border-gray-300 text-gray-600 hover:bg-gray-300 hover:text-black transition" id="lang-en-mobile">EN</button>
-      </div>
-      <h3 class="text-lg font-semibold mb-4 text-center">Suivez-nous</h3>
-      <div class="flex justify-center gap-5">
-        <a href="https://www.facebook.com/share/1AkCdm1ixj/" target="_blank" class="text-gray-600 hover:text-gold transition" aria-label="Facebook">
-          <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-        </a>
-        <a href="https://www.instagram.com/burnie_shop?igsh=bDZzcTkwaGMwZndi" target="_blank" class="text-gray-600 hover:text-gold transition" aria-label="Instagram">
-          <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-        </a>
-        <a href="https://www.tiktok.com/@burnie_shop?_r=1&_t=ZM-931avdVUjSl" target="_blank" class="text-gray-600 hover:text-gold transition" aria-label="TikTok">
-          <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/></svg>
-        </a>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- HERO SECTION -->
-<section class="h-[90vh] flex items-center justify-center bg-cover bg-center relative"
-style="background-image:url('./kenoleedesign.jpeg');">
-  <div class="absolute inset-0 bg-black/50"></div>
-  <div class="relative z-10 text-center text-white px-4 md:px-6">
-    <h2 class="text-3xl sm:text-5xl md:text-7xl font-bold mb-4 md:mb-6" data-lang="hero-title">Cheveux 100% Humains</h2>
-    <p class="text-base sm:text-xl md:text-2xl mb-6 md:mb-8" data-lang="hero-subtitle">Galerie exclusive • Qualité supérieure • Livraison rapide</p>
-    <div class="flex gap-3 md:gap-4 justify-center flex-wrap">
-      <a href="gallery.html" class="bg-gold text-black px-5 sm:px-8 py-3 sm:py-4 rounded-full font-bold hover:scale-105 transition text-sm sm:text-lg" data-lang="hero-gallery-btn">
-        Découvrir la Galerie
-      </a>
-      <a href="contact.html" class="bg-black border-2 border-gold text-gold px-5 sm:px-8 py-3 sm:py-4 rounded-full font-bold hover:bg-gold hover:text-black transition text-sm sm:text-lg" data-lang="hero-contact-btn">
-        Nous Contacter
-      </a>
-    </div>
-  </div>
-</section>
-
-<!-- FEATURES -->
-<section class="px-4 md:px-16 py-12 md:py-20 bg-white">
-  <h3 class="text-2xl md:text-4xl font-bold text-center mb-10 md:mb-16" data-lang="features-title">Pourquoi Choisir Burnie Shop?</h3>
-  <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
-
-    <div class="text-center">
-      <div class="text-4xl md:text-5xl mb-4"></div>
-      <h4 class="text-xl md:text-2xl font-bold mb-3" data-lang="feature1-title">100% Cheveux Humains</h4>
-      <p class="text-gray-600 text-sm md:text-base" data-lang="feature1-desc">Cheveux naturels de haute qualité, non traités chimiquement</p>
-    </div>
-
-    <div class="text-center">
-      <div class="text-4xl md:text-5xl mb-4"></div>
-      <h4 class="text-xl md:text-2xl font-bold mb-3" data-lang="feature2-title">Livraison Rapide</h4>
-      <p class="text-gray-600 text-sm md:text-base" data-lang="feature2-desc">Livraison express disponible dans tout le pays</p>
-    </div>
-
-    <div class="text-center">
-      <div class="text-4xl md:text-5xl mb-4"></div>
-      <h4 class="text-xl md:text-2xl font-bold mb-3" data-lang="feature3-title">Garantie Qualité</h4>
-      <p class="text-gray-600 text-sm md:text-base" data-lang="feature3-desc">Satisfaction garantie ou remboursement complet</p>
-    </div>
-
-  </div>
-</section>
-
-<!-- LATEST COLLECTION -->
-<section class="px-4 md:px-16 py-12 md:py-20 bg-gray-100">
-  <h3 class="text-2xl md:text-4xl font-bold text-center mb-10 md:mb-16">Dernière Collecte</h3>
-  <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
-
-    <div class="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition group">
-      <div class="relative overflow-hidden h-40 sm:h-60 md:h-80">
-        <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=400" class="w-full h-full object-cover group-hover:scale-110 transition duration-300" alt="Cheveux Brésiliens Raides">
-      </div>
-      <div class="p-3 sm:p-6">
-        <h4 class="font-bold text-sm sm:text-lg mb-2">Cheveux Brésiliens Raides</h4>
-      </div>
-    </div>
-
-    <div class="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition group">
-      <div class="relative overflow-hidden h-40 sm:h-60 md:h-80">
-        <img src="./kenoleedesign.jpeg" class="w-full h-full object-cover group-hover:scale-110 transition duration-300" alt="Ondes Corporelles">
-      </div>
-      <div class="p-3 sm:p-6">
-        <h4 class="font-bold text-sm sm:text-lg mb-2">Ondes Corporelles</h4>
-      </div>
-    </div>
-
-    <div class="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition group">
-      <div class="relative overflow-hidden h-40 sm:h-60 md:h-80">
-        <img src="https://images.unsplash.com/photo-1519699047748-de8e457a634e?w=400" class="w-full h-full object-cover group-hover:scale-110 transition duration-300" alt="Boucles Naturelles">
-      </div>
-      <div class="p-3 sm:p-6">
-        <h4 class="font-bold text-sm sm:text-lg mb-2">Boucles Naturelles</h4>
-      </div>
-    </div>
-
-    <div class="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition group">
-      <div class="relative overflow-hidden h-40 sm:h-60 md:h-80">
-        <img src="./peruque_lace_front.jpg" class="w-full h-full object-cover group-hover:scale-110 transition duration-300" alt="Perruque Lace Front">
-      </div>
-      <div class="p-3 sm:p-6">
-        <h4 class="font-bold text-sm sm:text-lg mb-2">Perruque Lace Front</h4>
-        <p class="text-gray-600 text-xs sm:text-base mb-2 sm:mb-4"></p>
-      </div>
-    </div>
-
-  </div>
-  <div class="text-center mt-8 md:mt-12">
-    <a href="gallery.html" class="bg-gold text-black px-6 sm:px-8 py-3 rounded-full font-bold hover:scale-105 transition inline-block text-sm sm:text-base">
-      Voir Tous les Produits →
-    </a>
-  </div>
-</section>
-
-<!-- TESTIMONIALS -->
-<section class="px-4 md:px-16 py-12 md:py-20 bg-white">
-  <h3 class="text-2xl md:text-4xl font-bold text-center mb-10 md:mb-16" data-lang="testimonials-title">Avis de Nos Clients</h3>
-  <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
-
-    <div class="bg-gray-100 p-5 md:p-8 rounded-lg">
-      <div class="text-gold text-xl md:text-2xl mb-3">★★★★★</div>
-      <p class="text-gray-700 mb-4 text-sm md:text-base" data-lang="testimonial1-text">"Les cheveux sont incroyables! Excellente qualité et livraison rapide. Je recommande vivement HairLux!"</p>
-      <p class="font-bold text-sm md:text-base" data-lang="testimonial1-author">- Marie D.</p>
-    </div>
-
-    <div class="bg-gray-100 p-5 md:p-8 rounded-lg">
-      <div class="text-gold text-xl md:text-2xl mb-3">★★★★★</div>
-      <p class="text-gray-700 mb-4 text-sm md:text-base" data-lang="testimonial2-text">"Meilleur achat que j'ai jamais fait. Les cheveux durent longtemps et ont l'air naturels. Merci!"</p>
-      <p class="font-bold text-sm md:text-base" data-lang="testimonial2-author">- Sophie L.</p>
-    </div>
-
-    <div class="bg-gray-100 p-5 md:p-8 rounded-lg">
-      <div class="text-gold text-xl md:text-2xl mb-3">★★★★★</div>
-      <p class="text-gray-700 mb-4 text-sm md:text-base" data-lang="testimonial3-text">"Service client extraordinaire et produits de qualité supérieure. Très satisfaite de mon achat!"</p>
-      <p class="font-bold text-sm md:text-base" data-lang="testimonial3-author">- Jessica M.</p>
-    </div>
-
-  </div>
-</section>
-
-<!-- CTA -->
-<section class="bg-black text-white px-4 md:px-16 py-12 md:py-20 text-center">
-  <h3 class="text-2xl md:text-4xl font-bold mb-4 md:mb-6" data-lang="cta-title">Prêt(e) à Transformer Vos Cheveux?</h3>
-  <p class="text-base md:text-xl mb-6 md:mb-8 text-gray-300" data-lang="cta-subtitle">Explorez notre collection exclusive dès maintenant</p>
-  <a href="gallery.html" class="bg-gold text-black px-6 sm:px-8 py-3 sm:py-4 rounded-full font-bold hover:scale-105 transition inline-block text-sm sm:text-lg" data-lang="cta-btn">
-    Consulter la Galerie
-  </a>
-</section>
-
-<!-- FOOTER -->
-<footer class="bg-gray-900 text-white text-center py-6 md:py-8 px-4">
-  <p class="mb-4 text-sm md:text-base">&copy; 2026 BURNIE-SHOP — Designed By <a href="https://xiodix.com" target="_blank" class="hover:text-gold">XIODIX</a></p>
-  <div class="flex justify-center gap-5 md:gap-6">
-    <a href="https://www.facebook.com/share/1AkCdm1ixj/" target="_blank" class="hover:text-gold transition" aria-label="Facebook">
-      <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-    </a>
-    <a href="https://www.instagram.com/burnie_shop?igsh=bDZzcTkwaGMwZndi" target="_blank" class="hover:text-gold transition" aria-label="Instagram">
-      <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-    </a>
-    <a href="https://www.tiktok.com/@burnie_shop?_r=1&_t=ZM-931avdVUjSl" target="_blank" class="hover:text-gold transition" aria-label="TikTok">
-      <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/></svg>
-    </a>
-  </div>
-</footer>
-
-<!-- JAVASCRIPT -->
-<script>
-  // Translations object
-  const translations = {
-    fr: {
-      'hero-title': 'Cheveux 100% Humains',
-      'hero-subtitle': 'Galerie exclusive • Qualité supérieure • Livraison rapide',
-      'hero-gallery-btn': 'Découvrir la Galerie',
-      'hero-contact-btn': 'Nous Contacter',
-      'features-title': 'Pourquoi Choisir Burnie Shop?',
-      'feature1-title': '100% Cheveux Humains',
-      'feature1-desc': 'Cheveux naturels de haute qualité, non traités chimiquement',
-      'feature2-title': 'Livraison Rapide',
-      'feature2-desc': 'Livraison express disponible dans tout le pays',
-      'feature3-title': 'Garantie Qualité',
-      'feature3-desc': 'Satisfaction garantie ou remboursement complet',
-      'testimonials-title': 'Avis de Nos Clients',
-      'testimonial1-text': '"Les cheveux sont incroyables! Excellente qualité et livraison rapide. Je recommande vivement HairLux!"',
-      'testimonial1-author': '- Marie D.',
-      'testimonial2-text': '"Meilleur achat que j\'ai jamais fait. Les cheveux durent longtemps et ont l\'air naturels. Merci!"',
-      'testimonial2-author': '- Sophie L.',
-      'testimonial3-text': '"Service client extraordinaire et produits de qualité supérieure. Très satisfaite de mon achat!"',
-      'testimonial3-author': '- Jessica M.',
-      'cta-title': 'Prêt(e) à Transformer Vos Cheveux?',
-      'cta-subtitle': 'Explorez notre collection exclusive dès maintenant',
-      'cta-btn': 'Consulter la Galerie'
-    },
-    en: {
-      'hero-title': '100% Human Hair',
-      'hero-subtitle': 'Exclusive Gallery • Superior Quality • Fast Delivery',
-      'hero-gallery-btn': 'Discover the Gallery',
-      'hero-contact-btn': 'Contact Us',
-      'features-title': 'Why Choose Burnie Shop?',
-      'feature1-title': '100% Human Hair',
-      'feature1-desc': 'High-quality natural hair, chemically untreated',
-      'feature2-title': 'Fast Delivery',
-      'feature2-desc': 'Express delivery available nationwide',
-      'feature3-title': 'Quality Guarantee',
-      'feature3-desc': 'Satisfaction guaranteed or full refund',
-      'testimonials-title': 'Customer Reviews',
-      'testimonial1-text': '"The hair is amazing! Excellent quality and fast delivery. I highly recommend HairLux!"',
-      'testimonial1-author': '- Marie D.',
-      'testimonial2-text': '"Best purchase I\'ve ever made. The hair lasts long and looks natural. Thank you!"',
-      'testimonial2-author': '- Sophie L.',
-      'testimonial3-text': '"Extraordinary customer service and superior quality products. Very satisfied with my purchase!"',
-      'testimonial3-author': '- Jessica M.',
-      'cta-title': 'Ready to Transform Your Hair?',
-      'cta-subtitle': 'Explore our exclusive collection now',
-      'cta-btn': 'View Gallery'
-    }
-  };
-
-  function toggleSidebar() {
-    const sidebar = document.getElementById('sidebar');
-    const overlay = document.getElementById('sidebarOverlay');
-    sidebar.classList.toggle('-translate-x-full');
-    overlay.classList.toggle('hidden');
-  }
-
-  function closeSidebar() {
-    const sidebar = document.getElementById('sidebar');
-    const overlay = document.getElementById('sidebarOverlay');
-    sidebar.classList.add('-translate-x-full');
-    overlay.classList.add('hidden');
-  }
-
-  function switchLanguage(lang) {
-    // Update button styles
-    const frBtn = document.getElementById('lang-fr');
-    const enBtn = document.getElementById('lang-en');
-    const frBtnMobile = document.getElementById('lang-fr-mobile');
-    const enBtnMobile = document.getElementById('lang-en-mobile');
-
-    if (lang === 'fr') {
-      frBtn.classList.add('border-gold', 'text-gold');
-      frBtn.classList.remove('border-gray-300', 'text-gray-600');
-      enBtn.classList.add('border-gray-300', 'text-gray-600');
-      enBtn.classList.remove('border-gold', 'text-gold');
-
-      frBtnMobile.classList.add('border-gold', 'text-gold');
-      frBtnMobile.classList.remove('border-gray-300', 'text-gray-600');
-      enBtnMobile.classList.add('border-gray-300', 'text-gray-600');
-      enBtnMobile.classList.remove('border-gold', 'text-gold');
-    } else {
-      enBtn.classList.add('border-gold', 'text-gold');
-      enBtn.classList.remove('border-gray-300', 'text-gray-600');
-      frBtn.classList.add('border-gray-300', 'text-gray-600');
-      frBtn.classList.remove('border-gold', 'text-gold');
-
-      enBtnMobile.classList.add('border-gold', 'text-gold');
-      enBtnMobile.classList.remove('border-gray-300', 'text-gray-600');
-      frBtnMobile.classList.add('border-gray-300', 'text-gray-600');
-      frBtnMobile.classList.remove('border-gold', 'text-gold');
-    }
-
-    // Update text content
-    const elements = document.querySelectorAll('[data-lang]');
-    elements.forEach(element => {
-      const key = element.getAttribute('data-lang');
-      if (translations[lang][key]) {
-        element.textContent = translations[lang][key];
-      }
-    });
-
-    // Update document language
-    document.documentElement.lang = lang;
-
-    // Store language preference
-    localStorage.setItem('preferredLanguage', lang);
-  }
-
-  // Initialize language on page load
-  document.addEventListener('DOMContentLoaded', function() {
-    const savedLang = localStorage.getItem('preferredLanguage') || 'fr';
-    switchLanguage(savedLang);
-  });
-</script>
-
-</body>
+      // Initialize language on page load
+      document.addEventListener("DOMContentLoaded", function () {
+        const savedLang = localStorage.getItem("preferredLanguage") || "fr";
+        switchLanguage(savedLang);
+      });
+    </script>
+  </body>
 </html>
