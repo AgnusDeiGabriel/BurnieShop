@@ -726,9 +726,11 @@
       }
 
       function sendProductToWhatsAppFinal(productName, imageUrl, userFullName, userMsg, userLoc) {
-        const origin = window.location.origin || 'http://127.0.0.1:5500';
-        const imageFull = `${origin}/${imageUrl}`;
-        const imageLink = `${origin}/view_image.html?src=${encodeURIComponent(imageFull)}`;
+        const origin = 'https://burnieshop.com';
+        // Build direct image URL for WhatsApp preview (encode spaces and special chars)
+        const imagePath = imageUrl.startsWith('/') ? imageUrl : '/' + imageUrl;
+        const directImageUrl = encodeURI(`${origin}${imagePath}`);
+
         let whatsappText = `*BURNIE SHOP - Demande de Produit*\n\n`;
         if (userFullName) whatsappText += `*Nom complet / Full name:* ${userFullName}\n\n`;
         whatsappText += `*Produit:* ${productName}\n\n`;
@@ -745,7 +747,7 @@
           }
           whatsappText += `*Localisation:*\n${mapsUrl}\n\n`;
         }
-        whatsappText += imageLink;
+        whatsappText += `*Image:*\n${directImageUrl}`;
         const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
         if (isMobile) {
           window.open(`https://wa.me/50932242766?text=${encodeURIComponent(whatsappText)}`, '_blank');
