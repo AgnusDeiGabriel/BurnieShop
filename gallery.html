@@ -37877,9 +37877,9 @@
 
       function sendProductToWhatsAppFinal(productName, imageUrl, userFullName, userMsg, userLoc) {
         const origin = 'https://burnieshop.com';
-        // Build direct image URL for WhatsApp preview
+        // Build direct image URL for WhatsApp preview (encode spaces and special chars)
         const imagePath = imageUrl.startsWith('/') ? imageUrl : '/' + imageUrl;
-        const directImageUrl = `${origin}${imagePath}`;
+        const directImageUrl = encodeURI(`${origin}${imagePath}`);
 
         let whatsappText = `*BURNIE SHOP - Demande de Produit*\n\n`;
         if (userFullName) whatsappText += `*Nom complet / Full name:* ${userFullName}\n\n`;
@@ -37900,7 +37900,7 @@
           whatsappText += `*Localisation:*\n${mapsUrl}\n\n`;
         }
 
-        whatsappText += directImageUrl;
+        whatsappText += `*Image:*\n${directImageUrl}`;
 
         const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
         if (isMobile) {
