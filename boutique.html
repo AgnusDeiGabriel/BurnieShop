@@ -332,54 +332,54 @@
         overlay.classList.add("hidden");
       }
 
-      // filenames from the Sandals/ folder
+      // filenames from the Sandales/ folder
       const sandalFiles = [
-        "0001_BALENCIAGA SANDAL.jpeg",
-        "0002_SAINT LAURENT SANDAL.jpeg",
-        "0003_SAINT LAURENT COLOR COLLECTION SANDAL.jpeg",
-        "0004_BALENCIAGA SANDAL.jpeg",
-        "0005_SAINT LAURENT SANDAL.jpeg",
-        "0006_BALENCIAGA COLOR COLLECTION SANDAL.jpeg",
-        "0007_LOUIS VUITTON COLOR COLLECTION SANDAL.jpeg",
-        "0008_CHRITIAN DIOR SANDAL.jpeg",
-        "0009_LOUIS VUITTON SANDAL.jpeg",
-        "0010_CHRITIAN DIOR SANDAL.jpeg",
-        "0011_CHRITIAN DIOR COLOR COLLECTION SANDAL.jpeg",
-        "0012_CELINE SANDAL.jpeg",
-        "0013_CELINE SANDAL.jpeg",
-        "0014_CHRITIAN DIOR SANDAL.jpeg",
-        "0015_DOLCE GABANA SANDAL.jpeg",
-        "0016_DOLCE GABANA SANDAL.jpeg",
-        "0017_DOLCE GABANA SANDAL.jpeg",
-        "0018_DOLCE GABANA COLOR COLLECTION SANDAL.jpeg",
-        "0019_DOLCE GABANA SANDAL.jpeg",
-        "0020_DOLCE GABANA SANDAL.jpeg",
-        "0021_DOLCE GABANA COLOR COLLECTION SANDAL.jpeg",
-        "0022_LOUIS VUITTON SANADL.jpeg",
-        "0023_LOUIS VUITTON SANDAL.jpeg",
-        "0024_FENDI SANDAL.jpeg",
-        "0025_FENDI SANDAL.jpeg",
-        "0026_FENDI SANDAL.jpeg",
-        "0027_LOUIS VUITTON COLOR COLLECTION SANDAL.jpeg",
-        "0028_GUCCI COLOR COLLECTION SANDAL.jpeg",
-        "0029_FENDI COLOR COLLECTION SANDAL.jpeg",
-        "0030_COACH SANDAL.jpeg",
-        "0031_GUCCI COLOR COLLECTION SANDAL.jpeg",
-        "0032_CAROLINA HERRERA SANDAL.jpeg",
-        "0033_CHANEL COLOR COLLECTION SANDAL.jpeg",
-        "0034_LOUIS VUITTON COLOR COLLECTION SANDAL.jpeg",
-        "0035_MIU MIU COLOR COLLECTION SANDAL.jpeg",
-        "0036_BALENCIAGA COLOR COLLECTION SANDAL.jpeg",
-        "0037_CHANEL SANDAL.jpeg",
-        "0038CHANEL SANDAL.jpeg",
-        "0039_GUCCI SANDAL.jpeg",
-        "0040_GUCCI SANDAL.jpeg",
-        "0041_GUCCI COLOR COLLECTION SANDAL.jpeg",
-        "0042_GUCCI SANDAL.jpeg",
-        "0043_GUCCI SANDAL.jpeg",
-        "0044_BALENCIAGA COLOR COLLECTION SANDAL.jpeg",
-      ];
+        "0001_BALENCIAGA SANDALES.jpeg",
+        "0002_SAINT LAURENT SANDALES.jpeg",
+        "0003_SAINT LAURENT COLOR COLLECTION SANDALES.jpeg",
+        "0004_BALENCIAGA SANDALES.jpeg",
+        "0005_SAINT LAURENT SANDALES.jpeg",
+        "0006_BALENCIAGA COLOR COLLECTION SANDALES.jpeg",
+        "0007_LOUIS VUITTON COLOR COLLECTION SANDALES.jpeg",
+        "0008_CHRITIAN DIOR SANDALES.jpeg",
+        "0009_LOUIS VUITTON SANDALES.jpeg",
+        "0010_CHRITIAN DIOR SANDALES.jpeg",
+        "0011_CHRITIAN DIOR COLOR COLLECTION SANDALES.jpeg",
+        "0012_CELINE SANDALES.jpeg",
+        "0013_CELINE SANDALES.jpeg",
+        "0014_CHRITIAN DIOR SANDALES.jpeg",
+        "0015_DOLCE GABANA SANDALES.jpeg",
+        "0016_DOLCE GABANA SANDALES.jpeg",
+        "0017_DOLCE GABANA SANDALES.jpeg",
+        "0018_DOLCE GABANA COLOR COLLECTION SANDALES.jpeg",
+        "0019_DOLCE GABANA SANDALES.jpeg",
+        "0020_DOLCE GABANA SANDALES.jpeg",
+        "0021_DOLCE GABANA COLOR COLLECTION SANDALES.jpeg",
+        "0022_LOUIS VUITTON SANDALES.jpeg",
+        "0023_LOUIS VUITTON SANDALES.jpeg",
+        "0024_FENDI SANDALES.jpeg",
+        "0025_FENDI SANDALES.jpeg",
+        "0026_FENDI SANDALES.jpeg",
+        "0027_LOUIS VUITTON COLOR COLLECTION SANDALES.jpeg",
+        "0028_GUCCI COLOR COLLECTION SANDALES.jpeg",
+        "0029_FENDI COLOR COLLECTION SANDALES.jpeg",
+        "0030_COACH SANDALES.jpeg",
+        "0031_GUCCI COLOR COLLECTION SANDALES.jpeg",
+        "0032_CAROLINA HERRERA SANDALES.jpeg",
+        "0033_CHANEL COLOR COLLECTION SANDALES.jpeg",
+        "0034_LOUIS VUITTON COLOR COLLECTION SANDALES.jpeg",
+        "0035_MIU MIU COLOR COLLECTION SANDALES.jpeg",
+        "0036_BALENCIAGA COLOR COLLECTION SANDALES.jpeg",
+        "0037_CHANEL SANDALES.jpeg",
+        "0038CHANEL SANDALES.jpeg",
+        "0039_GUCCI SANDALES.jpeg",
+        "0040_GUCCI SANDALES.jpeg",
+        "0041_GUCCI COLOR COLLECTION SANDALES.jpeg",
+        "0042_GUCCI SANDALES.jpeg",
+        "0043_GUCCI SANDALES.jpeg",
+        "0044_BALENCIAGA COLOR COLLECTION SANDALES.jpeg",
 
+      ];
       // filenames from the Bags/ folder (valises category)
       const bagFiles = [
         "0001_COACH GREEN BAG.jpeg",
@@ -466,9 +466,9 @@
       function populateGrid() {
         const grid = document.getElementById("productsGrid");
         grid.innerHTML = "";
-        // add sandals
+        // add sandales
         sandalFiles.forEach((f) => {
-          const card = createCard(f, "Sandals", "sandales", "sandales");
+          const card = createCard(f, "Sandales", "sandales", "sandales");
           const img = card.querySelector("img");
           const displayName = f
             .replace(/^\d+_?/, "")
@@ -477,7 +477,7 @@
             .trim();
           img.style.cursor = "pointer";
           img.addEventListener("click", () =>
-            openModal(f, displayName, "Sandals"),
+            openModal(f, displayName, "Sandales"),
           );
           grid.appendChild(card);
         });
@@ -593,7 +593,7 @@
           "nav-gallery": "Gallery",
           "nav-contact": "Contact",
           "page-title": "Shop",
-          "page-sub": "Choose a category: Sandals, Luggage, Clothing, Other",
+          "page-sub": "Choose a category: Sandales, Luggage, Clothing, Other",
           "product-count": "Products",
           "empty-msg": "No products for this category.",
           "contact-btn": "Contact us",
